@@ -8,6 +8,23 @@
     <div id='calendar'></div>
 </div>
 
+<div class="modal fade" id="apointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="apointmentModalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="apointmentModalBody" class="modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -22,6 +39,16 @@
                   .then(response => response.json())
                   .then(data => successCallback(data))
                   .catch(error => failureCallback(error))
+          },
+          eventClick: function (info) {
+              const event = info.event;
+
+              // Set modal content
+              document.getElementById('apointmentModalTitle').innerText = event.title;
+              document.getElementById('apointmentModalBody').innerText = event.extendedProps.description || 'No details';
+
+              const myModal = new bootstrap.Modal(document.getElementById('apointmentModal'));
+              myModal.show();
           }
         });
         calendar.render()

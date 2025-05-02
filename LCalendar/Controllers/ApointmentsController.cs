@@ -29,7 +29,9 @@ public class ApointmentsController : Controller
         //start and end are the first and last days that are appearing in the calendar
         var calendarEvents = _dbContext.Apointments.ToList()
             .Where(a => ApointmentsUtils.ApointmentToShow(start, end, a.ScheduledStart, a.ScheduledEnd))
-            .Select(a => new CalendarEvent(a.Title, a.ScheduledStart, a.ScheduledEnd))
+            .Select(a => new CalendarEvent(a.Title, a.ScheduledStart, a.ScheduledEnd, 
+                                                    new CalendarEventExtendedProps(a.Id, a.Description))
+            )
             .ToList();
         return Json(calendarEvents);
     }
