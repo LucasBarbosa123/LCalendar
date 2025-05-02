@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /home/lukill/RiderProjects/LCalendar/LCalendar
 build_property._RazorSourceGeneratorDebug = 
 
+[/home/lukill/RiderProjects/LCalendar/LCalendar/Views/Apointments/CalendarPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXBvaW50bWVudHMvQ2FsZW5kYXJQYWdlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/lukill/RiderProjects/LCalendar/LCalendar/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
