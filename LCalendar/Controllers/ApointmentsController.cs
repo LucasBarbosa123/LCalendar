@@ -26,6 +26,8 @@ public class ApointmentsController : Controller
     
     public IActionResult GetCalendarEvents([FromQuery] DateTime start, [FromQuery] DateTime end)
     {
+        var allEvents = _dbContext.Apointments.ToList();
+        
         //start and end are the first and last days that are appearing in the calendar
         var calendarEvents = _dbContext.Apointments.ToList()
             .Where(a => ApointmentsUtils.ApointmentToShow(start, end, a.ScheduledStart, a.ScheduledEnd))
@@ -42,8 +44,22 @@ public class ApointmentsController : Controller
         var parsedDate = DateOnly.Parse(appointmentInfos.Date);
         var parsedStart = TimeOnly.Parse(appointmentInfos.StartTime);
         var parsedEnd = TimeOnly.Parse(appointmentInfos.EndTime);
-        
-        
+
+        var dateTimeStart = parsedDate.ToDateTime(parsedStart);
+        var dateTimeEnd = parsedDate.ToDateTime(parsedEnd);
+
+        var newAppointment = new Apointment
+        {
+            ClientId = 0,
+            EmployeeId = 0,
+            Title = appointmentInfos.Title,
+            Description = appointmentInfos.Description,
+            ScheduledStart = dateTimeStart,
+            ScheduledEnd = dateTimeEnd,
+            DurationMin = (int)Math.Ceiling((dateTimeEnd - dateTimeStart).TotalMinutes)
+        };
+        _dbContext.Apointments.Add(newAppointment);
+        _dbContext.SaveChanges();
         
         return Ok();
     }
