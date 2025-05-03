@@ -35,4 +35,16 @@ public class ApointmentsController : Controller
             .ToList();
         return Json(calendarEvents);
     }
+
+    [HttpPost]
+    public IActionResult CreateAppointment([FromBody] CreateApointmentInfo appointmentInfos)
+    {
+        var parsedDate = DateOnly.Parse(appointmentInfos.Date);
+        var parsedStart = TimeOnly.Parse(appointmentInfos.StartTime);
+        var parsedEnd = TimeOnly.Parse(appointmentInfos.EndTime);
+        
+        
+        
+        return Ok();
+    }
 }

@@ -4,15 +4,58 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 
 <div class="text-center">
-    <h1 class="display-4">Calendar</h1>
+    <h1 class="display-4">Calendário</h1>
     <div id="calendar"></div>
 </div>
 
 <div class="row justify-content-end">
     <div class="pt-3" style="width: fit-content">
-        <button class="btn btn-primary">
+        <button class="btn btn-primary" onclick="showCreateAppointmentModal()">
             Adicionar Marcação
         </button>
+    </div>
+</div>
+
+@* BOOTSTRAP MODAL FOR CREATING THE APOINTMENTS *@
+<div class="modal fade" id="createApointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createApointmentModalTitle"> Criar Marcação </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="createApointmentModalBody" class="modal-body">
+                <div class="my-1">
+                    <label> Título </label>
+                    <input class="form-control" type="text" id="createAppointmentTitle" placeholder="Título">
+                </div>
+                
+                <div class="my-1">
+                    <label> Descrição </label>
+                    <input class="form-control" type="text" id="createAppointmentDescription" placeholder="Descrição">
+                </div>
+
+                <div class="my-1">
+                    <label> Dia </label>
+                    <input class="form-control" id="createAppointmentDia" type="date">
+                </div>
+
+                <div class="row my-1">
+                    <div class="col-md-6">
+                        <label> Hora Início </label>
+                        <input class="form-control" id="createAppointmentStart" type="time">
+                    </div>
+                    <div class="col-md-6">
+                        <label> Hora Fim </label>
+                        <input class="form-control" id="createAppointmentEnd" type="time">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="clearAndCloseCreationModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="createAppointment()">Criar</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -35,9 +78,11 @@
     </div>
 </div>
 <script>
+      let calendar
+      //calendar part
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'timeGridWeek',
           slotMinTime: '08:00:00',
           slotMaxTime: '18:00:00',
@@ -50,16 +95,54 @@
                   .catch(error => failureCallback(error))
           },
           eventClick: function (info) {
-              const event = info.event;
+              const event = info.event
 
               // Set modal content
-              document.getElementById('apointmentModalTitle').innerText = event.title;
-              document.getElementById('apointmentModalBody').innerText = event.extendedProps.description || 'No details';
+              document.getElementById('apointmentModalTitle').innerText = event.title
+              document.getElementById('apointmentModalBody').innerText = event.extendedProps.description || 'No details'
 
-              const myModal = new bootstrap.Modal(document.getElementById('apointmentModal'));
-              myModal.show();
+              const myModal = new bootstrap.Modal(document.getElementById('apointmentModal'))
+              myModal.show()
           }
         });
         calendar.render()
       });
+      
+      //onclick functions
+      function showCreateAppointmentModal() {
+          const myModal = new bootstrap.Modal(document.getElementById('createApointmentModal'))
+          myModal.show()
+      }
+      function clearAndCloseCreationModal() {
+          let modalId = 'createApointmentModal'
+          
+          clearModal(modalId)
+          
+          let modalEl = document.getElementById(modalId)
+          let modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)
+          modalInstance.hide()
+      }
+      function createAppointment() {
+          let appointmentInfo = {
+              title: document.getElementById('createAppointmentTitle').value,
+              description: document.getElementById('createAppointmentDescription').value,
+              date: document.getElementById('createAppointmentDia').value,
+              startTime: document.getElementById('createAppointmentStart').value,
+              endTime: document.getElementById('createAppointmentEnd').value,
+          }
+          
+          fetch('/Apointments/CreateAppointment', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(appointmentInfo)
+          })
+          .then(response => console.log(response))
+          .catch(error => console.log(error))
+          
+          //clear and close the modal after creating the appointment and then refreshing the calendar
+          clearAndCloseCreationModal()
+          calendar.refetchEvents()
+      }
 </script>

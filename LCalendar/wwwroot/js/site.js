@@ -1,4 +1,16 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿//clears all the inputs in a modal
+function clearModal(modalId) {
+    let modal = document.getElementById(modalId)
+    let modalInputs = modal.querySelectorAll('input')
+    modalInputs.forEach(modalInput => {
+        modalInput.value = getInputDefaultValue(modalInput.type)
+    })
+}
 
-// Write your JavaScript code.
+const getInputDefaultValue = (type) => inputTypesDefaultValues[type]
+let inputTypesDefaultValues = {
+    text : "",
+    number: 0,
+    date: "",
+    time: ""
+}
