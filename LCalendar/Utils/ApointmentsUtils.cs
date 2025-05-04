@@ -34,9 +34,13 @@ public static class ApointmentsUtils
         {
             Title = appointment.Title,
             Description = appointment.Description,
+            
+            ClientId = appointment.ClientId ?? 0,
+            EmployeeId = appointment.EmployeeId ?? 0,
+            
             Date = $"{appointment.ScheduledStart?.Year}-{appointment.ScheduledStart?.Month:D2}-{appointment.ScheduledStart?.Day:D2}",
             StartTime = $"{appointment.ScheduledStart?.Hour:D2}:{appointment.ScheduledStart?.Minute:D2}",
-            EndTime = $"{appointment.ScheduledEnd?.Hour:D2}:{appointment.ScheduledEnd?.Minute:D2}"
+            EndTime = $"{appointment.ScheduledEnd?.Hour:D2}:{appointment.ScheduledEnd?.Minute:D2}",
         };
 
         return appointmentInfo;

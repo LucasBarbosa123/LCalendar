@@ -12,6 +12,12 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
 {
     public IActionResult CalendarPage()
     {
+        var employees =  dbContext.Employees.ToList();
+        ViewBag.Employees = employees;
+        
+        var clients = dbContext.Clients.ToList();
+        ViewBag.Clients = clients;
+        
         return View();
     }
     
@@ -37,8 +43,8 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
 
         var newAppointment = new Apointment
         {
-            ClientId = 0,
-            EmployeeId = 0,
+            ClientId = appointmentInfos.ClientId,
+            EmployeeId = appointmentInfos.EmployeeId,
             Title = appointmentInfos.Title,
             Description = appointmentInfos.Description,
             ScheduledStart = start,
@@ -68,6 +74,8 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
         appointment.ScheduledStart = start;
         appointment.ScheduledEnd = end;
         appointment.DurationMin = (int)Math.Ceiling((end - start).TotalMinutes);
+        appointment.ClientId = appointmentInfos.ClientId;
+        appointment.EmployeeId = appointmentInfos.EmployeeId;
         dbContext.SaveChanges();
         
         return Ok();

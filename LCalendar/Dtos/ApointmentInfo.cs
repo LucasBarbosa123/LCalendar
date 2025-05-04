@@ -14,4 +14,9 @@ public class ApointmentInfo
     public string StartTime { get; set; }
     [JsonPropertyName("endTime")]
     public string EndTime { get; set; }
+    [JsonPropertyName("clientId")]
+    public int ClientId { get; set; }
+    [JsonPropertyName("employeeId")]
+    public int EmployeeId { get; set; }
+    
 }
