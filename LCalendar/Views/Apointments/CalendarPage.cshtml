@@ -135,8 +135,6 @@
           }
           
           try {
-              console.log('appointmentBeingEditedId', appointmentBeingEditedId)
-              
               if (appointmentBeingEditedId == 0) {
                   const res = await fetch('/Apointments/CreateAppointment', {
                       method: 'POST',

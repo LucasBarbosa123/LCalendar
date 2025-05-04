@@ -8,17 +8,8 @@ using LCalendar.Utils;
 
 namespace LCalendar.Controllers;
 
-public class ApointmentsController : Controller
+public class ApointmentsController (AppDbContext dbContext) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly AppDbContext _dbContext;
-
-    public ApointmentsController(ILogger<HomeController> logger,  AppDbContext dbContext)
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-    }
-    
     public IActionResult CalendarPage()
     {
         return View();
@@ -26,10 +17,10 @@ public class ApointmentsController : Controller
     
     public IActionResult GetCalendarEvents([FromQuery] DateTime start, [FromQuery] DateTime end)
     {
-        var allEvents = _dbContext.Apointments.ToList();
+        var allEvents = dbContext.Apointments.ToList();
         
         //start and end are the first and last days that are appearing in the calendar
-        var calendarEvents = _dbContext.Apointments.ToList()
+        var calendarEvents = dbContext.Apointments.ToList()
             .Where(a => ApointmentsUtils.ApointmentToShow(start, end, a.ScheduledStart, a.ScheduledEnd))
             .Select(a => new CalendarEvent(a.Title, a.ScheduledStart, a.ScheduledEnd, 
                                                     new CalendarEventExtendedProps(a.Id, a.Description))
@@ -54,8 +45,8 @@ public class ApointmentsController : Controller
             ScheduledEnd = end,
             DurationMin = (int)Math.Ceiling((end - start).TotalMinutes)
         };
-        _dbContext.Apointments.Add(newAppointment);
-        _dbContext.SaveChanges();
+        dbContext.Apointments.Add(newAppointment);
+        dbContext.SaveChanges();
         
         return Created();
     }
@@ -63,7 +54,7 @@ public class ApointmentsController : Controller
     [HttpPut]
     public IActionResult UpdateAppointment([FromQuery] int id, [FromBody] ApointmentInfo appointmentInfos)
     {
-        var appointment = _dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
+        var appointment = dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
         if (appointment == null)
         {
             return BadRequest("No appointment found from that Id.");
@@ -77,7 +68,7 @@ public class ApointmentsController : Controller
         appointment.ScheduledStart = start;
         appointment.ScheduledEnd = end;
         appointment.DurationMin = (int)Math.Ceiling((end - start).TotalMinutes);
-        _dbContext.SaveChanges();
+        dbContext.SaveChanges();
         
         return Ok();
     }
@@ -85,16 +76,21 @@ public class ApointmentsController : Controller
     [HttpDelete]
     public IActionResult DeleteAppointment([FromQuery] int id)
     {
-        var appointment = _dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
-        _dbContext.Apointments.Remove(appointment);
-        _dbContext.SaveChanges();
+        var appointment = dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
+        if (appointment == null)
+        {
+            return BadRequest("No appointment found from that Id.");
+        }
+        
+        dbContext.Apointments.Remove(appointment);
+        dbContext.SaveChanges();
         
         return Ok();
     }
 
     public IActionResult GetAppointment([FromQuery] int id)
     {
-        var appointment = _dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
+        var appointment = dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
         if (appointment == null)
         {
             return BadRequest("No appointment found from that Id.");

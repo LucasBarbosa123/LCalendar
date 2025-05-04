@@ -1,0 +1,195 @@
+@using LCalendar.Dtos
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Funcionários</h1>
+</div>
+
+<button type="button" class="btn btn-primary" onclick="openEmployeeModal()">Criar Funcinário</button>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>CreationTime</th>
+        <th>RoleId</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (FullEmplyeeInfo employee in ViewBag.Employees)
+    {
+        <tr>
+            <td>@employee.Employee?.Name</td>
+            <td>@employee.Employee?.Email</td>
+            <td>@employee.Employee?.CreationTime</td>
+            <td>@(employee.Role?.Name ?? "")</td>
+            <td>
+                <button type="button" class="btn btn-primary" onclick="startEmployeeEdition('@employee.Employee?.Id')">Editar</button>
+                <button type="button" class="btn btn-danger" onclick="deleteEmployee('@employee.Employee?.Id')">Apagar</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@* BOOTSTRAP MODAL FOR THE CREATION AND EDITING OF EMPLOYEES *@
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="employeeModalTitle"></h5>
+                <button type="button" class="btn-close" onclick="clearAndCloseEmployeeModal()" aria-label="Close"></button>
+            </div>
+            <div id="employeeModalBody" class="modal-body">
+                <div class="my-1">
+                    <label> Nome </label>
+                    <input class="form-control" type="text" id="employeeName" placeholder="Nome">
+                </div>
+                
+                <div class="my-1">
+                    <label> Email </label>
+                    <input class="form-control" type="text" id="employeeEmail" placeholder="Email">
+                </div>
+
+                <div id="passwordDiv">
+                    <div class="my-1">
+                        <label> Password </label>
+                        <input class="form-control" type="password" id="employeePassword" placeholder="********">
+                    </div>
+                
+                    <div class="my-1">
+                        <label> Confirmar Password </label>
+                        <input class="form-control" type="password" id="employeePasswordConfirmation" placeholder="********">
+                    </div>
+                </div>
+
+                <div class="my-1">
+                    <label> Função </label>
+                    <select class="form-select" id="employeeRole">
+                        <option value="0">-</option>
+                        @foreach (Role role in ViewBag.Roles)
+                        {
+                            <option value="@role.Id">@role.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-6 d-flex justify-content-start mx-0">
+                    <button type="button" class="btn btn-secondary" onclick="clearAndCloseEmployeeModal()">Cancelar</button>
+                </div>
+                <div class="col-6 d-flex justify-content-end mx-0">
+                    <button type="button" class="btn btn-primary" id="createUpdateButton" onclick="createUpdateEmployee()">Criar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //page variables
+    let employeeIdBeingEdited = 0
+    
+    //functions to handle onclick
+    function openEmployeeModal() {
+        document.getElementById('passwordDiv').classList.remove('d-none')
+        changeEmployeeModalsButtonText('Criar')
+        showModal('employeeModal')
+    }
+    async function deleteEmployee(id) {
+        try {
+            const res = await fetch(`/Employees/DeleteEmployee?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+        } catch (error) {
+            console.error('Error deleting appointment:', error);
+        }
+        
+        reloadEmployeesTable()
+    }
+    async function startEmployeeEdition(id) {
+        let employeeInfo
+        //get the apointment data and fill the createApointmentModal fields
+        try {
+            const res = await fetch(`/Employees/GetEmployeeInfo?id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+
+            employeeInfo = await res.json()
+        } catch (error) {
+            console.error('Error creating appointment:', error);
+        }
+
+        document.getElementById('employeeName').value = employeeInfo.name
+        document.getElementById('employeeEmail').value = employeeInfo.email
+        document.getElementById('employeePassword').value = employeeInfo.password
+        document.getElementById('employeePasswordConfirmation').value = employeeInfo.passwordConfirmation
+        document.getElementById('employeeRole').value = employeeInfo.roleId
+
+        employeeIdBeingEdited = id
+        
+        document.getElementById('passwordDiv').classList.add('d-none')
+        changeEmployeeModalsButtonText('Atualizar')
+        showModal('employeeModal')
+    }
+    function clearAndCloseEmployeeModal() {
+        employeeIdBeingEdited = 0
+        
+        let modalId = 'employeeModal'
+        clearModal(modalId)
+        hideModal(modalId)
+    }
+    async function createUpdateEmployee() {
+        let employeeInfo = {
+            name: document.getElementById('employeeName').value,
+            email: document.getElementById('employeeEmail').value,
+            password: document.getElementById('employeePassword').value,
+            passwordConfirmation: document.getElementById('employeePasswordConfirmation').value,
+            roleId: document.getElementById('employeeRole').value,
+        }
+
+        try {
+            if (employeeIdBeingEdited == 0) {
+                const res = await fetch('/Employees/CreateEmployee', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(employeeInfo)
+                })
+            }
+            else {
+                const res = await fetch(`/Employees/UpdateEmployee?id=${employeeIdBeingEdited}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(employeeInfo)
+                })
+            }
+        } catch (error) {
+            console.error('Error creating or updating appointment:', error);
+        }
+        
+        clearAndCloseEmployeeModal()
+        reloadEmployeesTable()
+    }
+
+    //support functions for the ofunctions above
+    function changeEmployeeModalsButtonText(text) {
+        document.getElementById('createUpdateButton').textContent = text
+    }
+    function reloadEmployeesTable() {
+        location.reload()
+    }
+</script>
