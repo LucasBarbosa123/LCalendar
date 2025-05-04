@@ -22,6 +22,10 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXBvaW50bWVudHMvQ2FsZW5kYXJQYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/lukill/RiderProjects/LCalendar/LCalendar/Views/Clients/ClientsPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2xpZW50cy9DbGllbnRzUGFnZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/lukill/RiderProjects/LCalendar/LCalendar/Views/Employees/EmployeesPage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRW1wbG95ZWVzL0VtcGxveWVlc1BhZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

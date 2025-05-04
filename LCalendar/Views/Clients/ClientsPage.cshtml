@@ -1,0 +1,152 @@
+@{
+    ViewData["Title"] = "Clients";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Clientes</h1>
+</div>
+
+<button type="button" class="btn btn-primary" onclick="openClientModal()">Criar Cliente</button>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Numero</th>
+        <th>Name</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (Client client in ViewBag.Clients)
+        {
+            <tr>
+                <th>@client.Id</th>    
+                <th>@client.Name</th>    
+                <th>
+                    <button type="button" class="btn btn-primary" onclick="startClientEdition('@client.Id')">Editar</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteClient('@client.Id')">Eliminar</button>
+                </th>    
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* BOOTSTRAP MODAL FOR THE CREATION AND EDITING OF CLIENTS *@
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientModalTitle"></h5>
+                <button type="button" class="btn-close" onclick="clearAndCloseClientModal()" aria-label="Close"></button>
+            </div>
+            <div id="clientModalBody" class="modal-body">
+                <div class="my-1">
+                    <label> Nome </label>
+                    <input class="form-control" type="text" id="clientName" placeholder="Nome">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-6 d-flex justify-content-start mx-0">
+                    <button type="button" class="btn btn-secondary" onclick="clearAndCloseClientModal()">Cancelar</button>
+                </div>
+                <div class="col-6 d-flex justify-content-end mx-0">
+                    <button type="button" class="btn btn-primary" id="createUpdateButton" onclick="createUpdateClient()">Criar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //page variables
+    let clientIdBeingEdited = 0
+
+    //functions to handle onclick
+    function openClientModal() {
+        changeClientModalsButtonText('Criar')
+        showModal('clientModal')
+    }
+    async function deleteClient(id) {
+        try {
+            const res = await fetch(`/Clients/DeleteClient?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+        } catch (error) {
+            console.error('Error deleting appointment:', error);
+        }
+
+        reloadClientsTable()
+    }
+    async function startClientEdition(id) {
+        let clientInfo
+        //get the apointment data and fill the createApointmentModal fields
+        try {
+            const res = await fetch(`/Clients/GetClientInfo?id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+
+            clientInfo = await res.json()
+        } catch (error) {
+            console.error('Error creating appointment:', error);
+        }
+
+        document.getElementById('clientName').value = clientInfo.name
+
+        clientIdBeingEdited = id
+
+        changeClientModalsButtonText('Atualizar')
+        showModal('clientModal')
+    }
+    function clearAndCloseClientModal() {
+        clientIdBeingEdited = 0
+
+        let modalId = 'clientModal'
+        clearModal(modalId)
+        hideModal(modalId)
+    }
+    async function createUpdateClient() {
+        let employeeInfo = {
+            name: document.getElementById('clientName').value,
+        }
+
+        try {
+            if (clientIdBeingEdited == 0) {
+                const res = await fetch('/Clients/CreateClient', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(employeeInfo)
+                })
+            }
+            else {
+                const res = await fetch(`/Clients/UpdateClient?id=${clientIdBeingEdited}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(employeeInfo)
+                })
+            }
+        } catch (error) {
+            console.error('Error creating or updating appointment:', error);
+        }
+
+        clearAndCloseClientModal()
+        reloadClientsTable()
+    }
+    
+    //support functions for the ofunctions above
+    function changeClientModalsButtonText(text) {
+        document.getElementById('createUpdateButton').textContent = text
+    }
+    function reloadClientsTable() {
+        location.reload()
+    }
+</script>
