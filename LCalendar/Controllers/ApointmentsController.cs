@@ -39,14 +39,10 @@ public class ApointmentsController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateAppointment([FromBody] CreateApointmentInfo appointmentInfos)
+    public IActionResult CreateAppointment([FromBody] ApointmentInfo appointmentInfos)
     {
-        var parsedDate = DateOnly.Parse(appointmentInfos.Date);
-        var parsedStart = TimeOnly.Parse(appointmentInfos.StartTime);
-        var parsedEnd = TimeOnly.Parse(appointmentInfos.EndTime);
-
-        var dateTimeStart = parsedDate.ToDateTime(parsedStart);
-        var dateTimeEnd = parsedDate.ToDateTime(parsedEnd);
+        ApointmentsUtils.CalculateAppointmentDates(appointmentInfos.Date, appointmentInfos.StartTime, appointmentInfos.EndTime,
+                                                    out DateTime start, out DateTime end);
 
         var newAppointment = new Apointment
         {
@@ -54,13 +50,57 @@ public class ApointmentsController : Controller
             EmployeeId = 0,
             Title = appointmentInfos.Title,
             Description = appointmentInfos.Description,
-            ScheduledStart = dateTimeStart,
-            ScheduledEnd = dateTimeEnd,
-            DurationMin = (int)Math.Ceiling((dateTimeEnd - dateTimeStart).TotalMinutes)
+            ScheduledStart = start,
+            ScheduledEnd = end,
+            DurationMin = (int)Math.Ceiling((end - start).TotalMinutes)
         };
         _dbContext.Apointments.Add(newAppointment);
         _dbContext.SaveChanges();
         
+        return Created();
+    }
+
+    [HttpPut]
+    public IActionResult UpdateAppointment([FromQuery] int id, [FromBody] ApointmentInfo appointmentInfos)
+    {
+        var appointment = _dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
+        if (appointment == null)
+        {
+            return BadRequest("No appointment found from that Id.");
+        }
+        
+        ApointmentsUtils.CalculateAppointmentDates(appointmentInfos.Date, appointmentInfos.StartTime, appointmentInfos.EndTime,
+                                                    out DateTime start, out DateTime end);
+        
+        appointment.Title = appointmentInfos.Title;
+        appointment.Description = appointmentInfos.Description;
+        appointment.ScheduledStart = start;
+        appointment.ScheduledEnd = end;
+        appointment.DurationMin = (int)Math.Ceiling((end - start).TotalMinutes);
+        _dbContext.SaveChanges();
+        
         return Ok();
+    }
+
+    [HttpDelete]
+    public IActionResult DeleteAppointment([FromQuery] int id)
+    {
+        var appointment = _dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
+        _dbContext.Apointments.Remove(appointment);
+        _dbContext.SaveChanges();
+        
+        return Ok();
+    }
+
+    public IActionResult GetAppointment([FromQuery] int id)
+    {
+        var appointment = _dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();
+        if (appointment == null)
+        {
+            return BadRequest("No appointment found from that Id.");
+        }
+
+        var appointmentInfo = appointment.ConvertToAppointmentInfo();
+        return Ok(appointmentInfo);
     }
 }

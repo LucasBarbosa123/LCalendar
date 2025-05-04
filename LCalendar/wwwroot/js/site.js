@@ -14,3 +14,13 @@ let inputTypesDefaultValues = {
     date: "",
     time: ""
 }
+
+function hideModal(modalId) {
+    let modalEl = document.getElementById(modalId)
+    let modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)
+    modalInstance.hide()
+}
+function showModal(modalId) {
+    const myModal = new bootstrap.Modal(document.getElementById(modalId))
+    myModal.show()
+}

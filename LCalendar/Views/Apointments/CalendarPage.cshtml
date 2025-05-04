@@ -10,19 +10,19 @@
 
 <div class="row justify-content-end">
     <div class="pt-3" style="width: fit-content">
-        <button class="btn btn-primary" onclick="showCreateAppointmentModal()">
+        <button class="btn btn-primary" onclick="openCreationModal()">
             Adicionar Marcação
         </button>
     </div>
 </div>
 
 @* BOOTSTRAP MODAL FOR CREATING THE APOINTMENTS *@
-<div class="modal fade" id="createApointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="createApointmentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createApointmentModalTitle"> Criar Marcação </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="clearAndCloseCreationModal()" aria-label="Close"></button>
             </div>
             <div id="createApointmentModalBody" class="modal-body">
                 <div class="my-1">
@@ -53,32 +53,40 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="clearAndCloseCreationModal()">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="createAppointment()">Criar</button>
+                <button type="button" class="btn btn-primary" id="createUpdateButton" onclick="createUpdateAppointment()">Criar</button>
             </div>
         </div>
     </div>
 </div>
 
 @* BOOTSTRAP MODAL FOR THE APOINTMENTS DATA *@
-<div class="modal fade" id="apointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="apointmentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="apointmentModalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="clearAndCloseAppointmentModal()" aria-label="Close"></button>
             </div>
             <div id="apointmentModalBody" class="modal-body">
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="col-6 d-flex justify-content-start mx-0">
+                    <button type="button" class="btn btn-danger" onclick="deleteAppointment()">Eliminar</button>
+                </div>
+                <div class="col-6 d-flex justify-content-end mx-0">
+                    <button type="button" class="btn btn-primary" onclick="startAppointmentEdition()">Editar</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <script>
+      //page variables
       let calendar
+      let popUpAppointmentsId = 0
+      let appointmentBeingEditedId = 0
+      
       //calendar part
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -88,7 +96,6 @@
           slotMaxTime: '18:00:00',
           height: 'auto',
           events: function(fetchInfo, successCallback, failureCallback) {
-              console.log('calendario refreshed')
               // fetchInfo has start and end dates
               fetch('/Apointments/GetCalendarEvents?start=' + encodeURIComponent(fetchInfo.startStr) + '&end=' + encodeURIComponent(fetchInfo.endStr))
                   .then(response => response.json())
@@ -101,29 +108,24 @@
               // Set modal content
               document.getElementById('apointmentModalTitle').innerText = event.title
               document.getElementById('apointmentModalBody').innerText = event.extendedProps.description || 'No details'
-
-              const myModal = new bootstrap.Modal(document.getElementById('apointmentModal'))
-              myModal.show()
+              showModal('apointmentModal')
+              
+              //so we know what appointment we are messing with
+              popUpAppointmentsId = event.extendedProps.id
           }
         });
         calendar.render()
       });
       
       //onclick functions
-      function showCreateAppointmentModal() {
-          const myModal = new bootstrap.Modal(document.getElementById('createApointmentModal'))
-          myModal.show()
-      }
       function clearAndCloseCreationModal() {
+          appointmentBeingEditedId = 0;
+          
           let modalId = 'createApointmentModal'
-          
           clearModal(modalId)
-          
-          let modalEl = document.getElementById(modalId)
-          let modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)
-          modalInstance.hide()
+          hideModal(modalId)
       }
-      async function createAppointment() {
+      async function createUpdateAppointment() {
           let appointmentInfo = {
               title: document.getElementById('createAppointmentTitle').value,
               description: document.getElementById('createAppointmentDescription').value,
@@ -133,19 +135,95 @@
           }
           
           try {
-              const res = await fetch('/Apointments/CreateAppointment', {
-                  method: 'POST',
+              console.log('appointmentBeingEditedId', appointmentBeingEditedId)
+              
+              if (appointmentBeingEditedId == 0) {
+                  const res = await fetch('/Apointments/CreateAppointment', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(appointmentInfo)
+                  })
+              }
+              else {
+                  const res = await fetch(`/Apointments/UpdateAppointment?id=${appointmentBeingEditedId}`, {
+                      method: 'PUT',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(appointmentInfo)
+                  })
+              }
+          } catch (error) {
+              console.error('Error creating or updating appointment:', error);
+          }
+
+          //clear and close the modal after creating the appointment and then refreshing the calendar
+          clearAndCloseCreationModal()
+          calendar.refetchEvents()
+      }
+      function clearAndCloseAppointmentModal() {
+          popUpAppointmentsId = 0
+
+          let modalId = 'apointmentModal'
+          clearModal(modalId)
+          hideModal(modalId)
+      }
+      async function deleteAppointment() {
+          try {
+              const res = await fetch(`/Apointments/DeleteAppointment?id=${popUpAppointmentsId}`, {
+                  method: 'DELETE',
                   headers: {
                       'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify(appointmentInfo)
+              })
+          } catch (error) {
+              console.error('Error deleting appointment:', error);
+          }
+
+          //clear and close the modal after creating the appointment and then refreshing the calendar
+          clearAndCloseAppointmentModal()
+          calendar.refetchEvents()
+      }
+      async function startAppointmentEdition() {
+          let appointmentInfo
+          //get the apointment data and fill the createApointmentModal fields
+          try {
+              const res = await fetch(`/Apointments/GetAppointment?id=${popUpAppointmentsId}`, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
               })
 
-              //clear and close the modal after creating the appointment and then refreshing the calendar
-              clearAndCloseCreationModal()
-              calendar.refetchEvents()
+              appointmentInfo = await res.json()
           } catch (error) {
               console.error('Error creating appointment:', error);
           }
+          
+          //set the fields to the respective values so they can be edited
+          document.getElementById('createAppointmentTitle').value = appointmentInfo.title
+          document.getElementById('createAppointmentDescription').value = appointmentInfo.description
+          document.getElementById('createAppointmentDia').value = appointmentInfo.date
+          document.getElementById('createAppointmentStart').value = appointmentInfo.startTime
+          document.getElementById('createAppointmentEnd').value = appointmentInfo.endTime
+
+          //set the id of the appointment been edited
+          appointmentBeingEditedId = popUpAppointmentsId
+          changeCreateUpdateButtonText('Atualizar')
+          
+          //change the modal on screen
+          clearAndCloseAppointmentModal()
+          showModal('createApointmentModal')
+      }
+      function openCreationModal() {
+          changeCreateUpdateButtonText('Criar')
+          showModal('createApointmentModal')
+      }
+      
+      //support functions for the ofunctions above
+      function changeCreateUpdateButtonText(text) {
+          document.getElementById('createUpdateButton').textContent = text
       }
 </script>

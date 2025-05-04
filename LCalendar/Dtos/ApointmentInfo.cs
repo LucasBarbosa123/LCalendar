@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace LCalendar.Dtos;
 
-public class CreateApointmentInfo
+public class ApointmentInfo
 {
     [JsonPropertyName("title")]
     public string Title { get; set; }
