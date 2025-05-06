@@ -31,3 +31,28 @@ var checkWidowWidth = function () {
         return false;
     }
 }
+
+function runAfterRender(func) {
+    document.addEventListener("DOMContentLoaded", () => {
+        func()
+    })
+}
+
+function addjustDataTablesTopSection(tableId, lastDivId) {
+    let tableWrapper = document.getElementById(`${tableId}_wrapper`)
+    let topSectionContainer = document.createElement("div")
+    topSectionContainer.classList.add("datatables-top-section")
+    
+    let length = document.getElementById(`${tableId}_length`)
+    let filter = document.getElementById(`${tableId}_filter`)
+    let lastDiv = document.getElementById(lastDivId)
+
+    filter.classList.add("middle-div")
+    filter.style.paddingBottom = "15px !important"
+    
+    topSectionContainer.appendChild(length)
+    topSectionContainer.appendChild(filter)
+    topSectionContainer.appendChild(lastDiv)
+    
+    tableWrapper.prepend(topSectionContainer)
+}

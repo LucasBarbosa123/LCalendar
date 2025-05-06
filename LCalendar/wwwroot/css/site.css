@@ -1,3 +1,29 @@
 .sidebar-nav ul .sidebar-item .first-level .sidebar-item .sidebar-link iconify-icon {
     display: block !important;
 }
+
+.dataTables_paginate.paging_simple_numbers {
+    margin-bottom:  20px !important;
+}
+
+.datatables-top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.datatables-top-section div {
+    width: min-content;
+}
+.datatables-top-section .middle-div {
+    width: -webkit-fill-available;
+    padding:  0 20px;
+}
+
+td {
+    align-content: center;
+}
+
+table tbody tr td:last-child {
+    padding: 5px 15px;
+}

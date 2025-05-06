@@ -10,459 +10,482 @@
     <link rel="stylesheet" href="~/LCalendar.styles.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/css/styles.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 </head>
 <body>
+@* ONLY JS IMPORT AT THE TOP BECAUSE HAS THE runAfterRender FUNCTION *@
+<script src="~/js/site.js" asp-append-version="true"></script>
+
 <div id="main-wrapper">
-<aside class="left-sidebar with-vertical">
+  <aside class="left-sidebar with-vertical">
     <div>
-        <!-- ---------------------------------- -->
-        <!-- Start Vertical Layout Sidebar -->
-        <!-- ---------------------------------- -->
-        <!-- Sidebar scroll-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar>
-            <!-----------Profile------------------>
-            <div class="user-profile position-relative" style="background: url(/images/backgrounds/user-info.jpg) no-repeat;">
-            <!-- User profile image -->
-            <div class="profile-img">
-              <img src="~/images/profile/user-1.jpg" alt="user" class="w-100 rounded-circle overflow-hidden" />
-            </div>
-            <!-- User profile text-->
-            <div class="profile-text hide-menu pt-1 dropdown">
-              <a href="javascript:void(0)" class="w-100 text-white d-block position-relative">Markarn Doe</a>
-            </div>
-          </div>
-            <!-----------Profile End------------------>
-
-            <ul id="sidebarnav">
-                <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold" class="nav-small-cap-icon fs-4"></iconify-icon>
-                    <span class="hide-menu">Personal</span>
-                </li>
-                <!-- ---------------------------------- -->
-                <!-- Dashboard -->
-                <!-- ---------------------------------- -->
-                <li class="sidebar-item">
-                    <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <iconify-icon icon="solar:home-broken" class="aside-icon" id="get-url"></iconify-icon>
-                        <span class="hide-menu">Início</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                  <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                    <iconify-icon icon="solar:home-angle-linear" class="aside-icon"></iconify-icon>
-                    <span class="hide-menu">Marcações</span>
-                  </a>
-                  <ul aria-expanded="false" class="collapse first-level">
-                    <li class="sidebar-item">
-                      <a class="sidebar-link sublink" a class="sidebar-link" asp-area="" asp-controller="Apointments" asp-action="CalendarPage">
-                        <div class="round-16 d-flex align-items-center justify-content-center">
-                          <iconify-icon icon="solar:calendar-broken" class="aside-icon"></iconify-icon>
-                        </div>
-                        <span class="hide-menu">Calendário</span>
-                      </a>
-                    </li>
-                  </ul>
-                  
-                  @* <a class="sidebar-link" asp-area="" asp-controller="Apointments" asp-action="CalendarPage"> *@
-                  @*   <iconify-icon icon="solar:calendar-broken" class="aside-icon"></iconify-icon> *@
-                  @*   <span class="hide-menu">Calendário</span> *@
-                  @* </a> *@
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" asp-area="" asp-controller="Employees" asp-action="EmployeesPage">
-                        <iconify-icon icon="solar:user-broken" class="aside-icon"></iconify-icon>
-                        <span class="hide-menu">Funcionários</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" asp-area="" asp-controller="Clients" asp-action="ClientsPage">
-                        <iconify-icon icon="solar:user-hand-up-broken" class="aside-icon"></iconify-icon>
-                        <span class="hide-menu">Clientes</span>
-                    </a>
-                </li>
-
-            </ul>
-        </nav>
-    </div>
-</aside>
-<div class="page-wrapper">
-  <header class="topbar rounded-0 border-0 bg-primary">
-    <div class="with-vertical"><!-- ---------------------------------- -->
-      <!-- Start Vertical Layout Header -->
       <!-- ---------------------------------- -->
-      <nav class="navbar navbar-expand-lg px-lg-0 px-3 py-0">
-        <div class="d-none d-lg-block">
-          <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="~/main/index.html" class="text-nowrap logo-img d-flex align-items-center gap-2">
-              <b class="logo-icon">
-                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                <!-- Dark Logo icon -->
-                <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="dark-logo" />
-                <!-- Light Logo icon -->
-                <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="light-logo" />
-              </b>
-              <!--End Logo icon -->
-              <!-- Logo text -->
-              <span class="logo-text">
-                <!-- dark Logo text -->
-                <img src="~/images/logos/logo-light-text.svg" alt="homepage" class="dark-logo ps-2" />
-                <!-- Light Logo text -->
-                <img src="~/images/logos/logo-light-text.svg" class="light-logo ps-2" alt="homepage" />
-              </span>
-            </a>
+      <!-- Start Vertical Layout Sidebar -->
+      <!-- ---------------------------------- -->
+      <!-- Sidebar scroll-->
+      <nav class="sidebar-nav scroll-sidebar" data-simplebar>
+        <!-----------Profile------------------>
+        <div class="user-profile position-relative" style="background: url(/images/backgrounds/user-info.jpg) no-repeat;">
+          <!-- User profile image -->
+          <div class="profile-img">
+            <img src="~/images/profile/user-1.jpg" alt="user" class="w-100 rounded-circle overflow-hidden"/>
+          </div>
+          <!-- User profile text-->
+          <div class="profile-text hide-menu pt-1 dropdown">
+            <a href="javascript:void(0)" class="w-100 text-white d-block position-relative">Markarn Doe</a>
           </div>
         </div>
+        <!-----------Profile End------------------>
 
-        <ul class="navbar-nav gap-2">
-
-          <li class="nav-item nav-icon-hover-bg rounded-circle">
-            <a class="nav-link nav-icon-hover sidebartoggler" id="headerCollapse" href="javascript:void(0)">
-              <iconify-icon icon="solar:list-bold"></iconify-icon>
+        <ul id="sidebarnav">
+          <li class="nav-small-cap">
+            <iconify-icon icon="solar:menu-dots-bold" class="nav-small-cap-icon fs-4"></iconify-icon>
+            <span class="hide-menu">Personal</span>
+          </li>
+          <!-- ---------------------------------- -->
+          <!-- Dashboard -->
+          <!-- ---------------------------------- -->
+          <li class="sidebar-item">
+            <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Index">
+              <iconify-icon icon="solar:home-broken" class="aside-icon" id="get-url"></iconify-icon>
+              <span class="hide-menu">Início</span>
             </a>
           </li>
-        </ul>
-
-        <div class="d-block d-lg-none">
-          <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="../main/index.html" class="text-nowrap logo-img d-flex align-items-center gap-2">
-              <b class="logo-icon">
-                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                <!-- Dark Logo icon -->
-                <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="dark-logo" />
-                <!-- Light Logo icon -->
-                <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="light-logo" />
-              </b>
-              <!--End Logo icon -->
-              <!-- Logo text -->
-              <span class="logo-text">
-                <!-- dark Logo text -->
-                <img src="~/images/logos/logo-light-text.svg" alt="homepage" class="dark-logo ps-2" />
-                <!-- Light Logo text -->
-                <img src="~/images/logos/logo-light-text.svg" class="light-logo ps-2" alt="homepage" />
-              </span>
+          <li class="sidebar-item">
+            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+              <iconify-icon icon="solar:calendar-broken" class="aside-icon"></iconify-icon>
+              <span class="hide-menu">Marcações</span>
             </a>
-          </div>
-        </div>
-        <ul class="navbar-nav flex-row  gap-2 align-items-center justify-content-center d-flex d-lg-none">
-          <li class="nav-item dropdown nav-icon-hover-bg rounded-circle">
-            <a class="navbar-toggler nav-link text-white nav-icon-hover border-0" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="">
-                <i class="ti ti-dots fs-7"></i>
-              </span>
-            </a>
-          </li>
-        </ul>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <div class="d-flex align-items-center justify-content-between py-2 py-lg-0">
-            <ul class="navbar-nav flex-row  align-items-center justify-content-center d-flex d-lg-none">
-              <li class="nav-item dropdown">
-                <a href="javascript:void(0)" class="nav-link d-flex d-lg-none align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar" aria-controls="offcanvasWithBothOptions">
-                  <iconify-icon icon="solar:menu-dots-circle-linear"></iconify-icon>
+            <ul aria-expanded="false" class="collapse first-level">
+              <li class="sidebar-item">
+                <a class="sidebar-link sublink" a class="sidebar-link" asp-area="" asp-controller="Apointments" asp-action="CalendarPage">
+                  <div class="round-16 d-flex align-items-center justify-content-center">
+                    <iconify-icon icon="solar:calendar-broken" class="aside-icon"></iconify-icon>
+                  </div>
+                  <span class="hide-menu">Calendário</span>
                 </a>
-              </li>
-              <li class="nav-item hover-dd dropdown nav-icon-hover-bg rounded-circle">
-                <a class="nav-link nav-icon-hover waves-effect waves-dark" href="javascript:void(0)" id="drop2" aria-expanded="false">
-                  <iconify-icon icon="solar:bell-bing-line-duotone"></iconify-icon>
-                  <div class="notify">
-                    <span class="heartbit"></span>
-                    <span class="point"></span>
-                  </div>
-                </a>
-                <div class="dropdown-menu py-0 content-dd  dropdown-menu-animate-up overflow-hidden" aria-labelledby="drop2">
-
-                  <div class="py-3 px-4 bg-primary">
-                    <div class="mb-0 fs-6 fw-medium text-white">Notifications</div>
-                    <div class="mb-0 fs-2 fw-medium text-white">You have 4 Notifications</div>
-                  </div>
-                  <div class="message-body" data-simplebar>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center  dropdown-item gap-3   border-bottom">
-                      <span class="flex-shrink-0 bg-primary-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-primary">
-                        <iconify-icon icon="solar:widget-3-line-duotone"></iconify-icon>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Launch Admin</h6>
-                          <span class="fs-2 d-block text-muted ">9:30 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
-                      <span class="flex-shrink-0 bg-secondary-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-secondary">
-                        <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Event today</h6>
-                          <span class="fs-2 d-block text-muted ">9:10 AM</span>
-                        </div>
-
-                        <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
-                      <span class="flex-shrink-0 bg-danger-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-danger">
-                        <iconify-icon icon="solar:settings-minimalistic-line-duotone"></iconify-icon>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Settings</h6>
-                          <span class="fs-2 d-block text-muted ">9:08 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
-                      <span class="flex-shrink-0 bg-warning-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-warning">
-                        <iconify-icon icon="solar:link-circle-line-duotone"></iconify-icon>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Luanch Admin</h6>
-                          <span class="fs-2 d-block text-muted ">9:30 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
-                      <span class="flex-shrink-0 bg-success-subtle rounded-circle round-40 d-flex align-items-center justify-content-center">
-                        <i data-feather="calendar" class="feather-sm fill-white text-success"></i>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Event today</h6>
-                          <span class="fs-2 d-block text-muted ">9:10 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
-                      <span class="flex-shrink-0 bg-info-subtle rounded-circle round-40 d-flex align-items-center justify-content-center">
-                        <i data-feather="settings" class="feather-sm fill-white text-info"></i>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Settings</h6>
-                          <span class="fs-2 d-block text-muted ">9:08 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="p-3">
-                    <a class="d-flex btn btn-primary  align-items-center justify-content-center gap-2" href="javascript:void(0);">
-                      <span>Check all Notifications</span>
-                      <iconify-icon icon="solar:alt-arrow-right-outline" class="iconify-sm"></iconify-icon>
-                    </a>
-                  </div>
-                </div>
-              </li>
-              <li class="nav-item hover-dd dropdown nav-icon-hover-bg rounded-circle">
-                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" aria-expanded="false">
-                  <iconify-icon icon="solar:inbox-line-line-duotone"></iconify-icon>
-                  <div class="notify">
-                    <span class="heartbit"></span>
-                    <span class="point"></span>
-                  </div>
-                </a>
-                <div class="dropdown-menu py-0 content-dd dropdown-menu-animate-up overflow-hidden" aria-labelledby="drop2">
-
-                  <div class="py-3 px-4 bg-secondary">
-                    <div class="mb-0 fs-6 fw-medium text-white">Messages</div>
-                    <div class="mb-0 fs-2 fw-medium text-white">You have 5 new messages</div>
-                  </div>
-                  <div class="message-body" data-simplebar>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
-                      <span class="user-img position-relative d-inline-block">
-                        <img src="~/images/profile/user-2.jpg" alt="user" class="rounded-circle w-100 round-40" />
-                        <span class="profile-status bg-success position-absolute rounded-circle"></span>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Mathew Anderson</h6>
-                          <span class="fs-2 d-block text-muted">9:30 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
-                      <span class="user-img position-relative d-inline-block">
-                        <img src="~/images/profile/user-3.jpg" alt="user" class="rounded-circle w-100 round-40" />
-                        <span class="profile-status bg-success position-absolute rounded-circle"></span>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Bianca Anderson</h6>
-                          <span class="fs-2 d-block text-muted">9:10 AM</span>
-                        </div>
-
-                        <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
-                      <span class="user-img position-relative d-inline-block">
-                        <img src="~/images/profile/user-4.jpg" alt="user" class="rounded-circle w-100 round-40" />
-                        <span class="profile-status bg-success position-absolute rounded-circle"></span>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Andrew Johnson</h6>
-                          <span class="fs-2 d-block text-muted">9:08 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
-                      <span class="user-img position-relative d-inline-block">
-                        <img src="~/images/profile/user-5.jpg" alt="user" class="rounded-circle w-100 round-40" />
-                        <span class="profile-status bg-success position-absolute rounded-circle"></span>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Miyra Strokes</h6>
-                          <span class="fs-2 d-block text-muted">9:30 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
-                      <span class="user-img position-relative d-inline-block">
-                        <img src="~/images/profile/user-6.jpg" alt="user" class="rounded-circle w-100 round-40" />
-                        <span class="profile-status bg-success position-absolute rounded-circle"></span>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Mark, Stoinus & Rishvi..</h6>
-                          <span class="fs-2 d-block text-muted">9:10 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
-                      </div>
-                    </a>
-                    <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
-                      <span class="user-img position-relative d-inline-block">
-                        <img src="~/images/profile/user-7.jpg" alt="user" class="rounded-circle w-100 round-40" />
-                        <span class="profile-status bg-success position-absolute rounded-circle"></span>
-                      </span>
-                      <div class="w-80">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h6 class="mb-1">Eliga Rush</h6>
-                          <span class="fs-2 d-block text-muted">9:08 AM</span>
-                        </div>
-                        <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="p-3">
-                    <a class="d-flex btn btn-secondary  align-items-center justify-content-center gap-2" href="javascript:void(0);">
-                      <span>Check all Messages</span>
-                      <iconify-icon icon="solar:alt-arrow-right-outline" class="iconify-sm"></iconify-icon>
-                    </a>
-                  </div>
-
-                </div>
               </li>
             </ul>
-            <ul class="navbar-nav gap-2 flex-row ms-auto align-items-center justify-content-center">
-              <li class="nav-item nav-icon-hover-bg rounded-circle">
-                <a class="nav-link nav-icon-hover moon dark-layout" href="javascript:void(0)">
-                  <iconify-icon icon="solar:moon-line-duotone" class="moon"></iconify-icon>
-                </a>
-                <a class="nav-link nav-icon-hover sun light-layout" href="javascript:void(0)">
-                  <iconify-icon icon="solar:sun-2-line-duotone" class="sun"></iconify-icon>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+              <iconify-icon icon="solar:user-broken" class="aside-icon"></iconify-icon>
+              <span class="hide-menu">Funcionários</span>
+            </a>
+            <ul aria-expanded="false" class="collapse first-level">
+              <li class="sidebar-item">
+                <a class="sidebar-link sublink" a class="sidebar-link" asp-area="" asp-controller="Employees" asp-action="EmployeesPage">
+                  <div class="round-16 d-flex align-items-center justify-content-center">
+                    <iconify-icon icon="solar:user-broken" class="aside-icon"></iconify-icon>
+                  </div>
+                  <span class="hide-menu">Funcionários</span>
                 </a>
               </li>
-
-              <!-- ------------------------------- -->
-              <!-- start profile Dropdown -->
-              <!-- ------------------------------- -->
-              <li class="nav-item hover-dd dropdown">
-                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" aria-expanded="false">
-                  <img src="~/images/profile/user-1.jpg" alt="user" class="profile-pic rounded-circle round-30" />
+              <li class="sidebar-item">
+                <a class="sidebar-link sublink" a class="sidebar-link" asp-area="" asp-controller="Duties" asp-action="DutiesPage">
+                  <div class="round-16 d-flex align-items-center justify-content-center">
+                    <iconify-icon icon="solar:pin-list-broken" class="aside-icon"></iconify-icon>
+                  </div>
+                  <span class="hide-menu">Funções</span>
                 </a>
-                <div class="dropdown-menu pt-0 content-dd overflow-hidden pt-0 dropdown-menu-end user-dd" aria-labelledby="drop2">
-                  <div class="profile-dropdown position-relative" data-simplebar>
-                    <div class=" py-3 border-bottom">
-                      <div class="d-flex align-items-center px-3">
-                        <img src="~/images/profile/user-1.jpg" class="rounded-circle round-50" alt="" />
-                        <div class="ms-3">
-                          <h5 class="mb-1 fs-4">Markarn Doe</h5>
-                          <p class="mb-0 fs-2 d-flex align-items-center text-muted">
-                            markrarn@wrappixel.com
-                          </p>
-                        </div>
-                      </div>
+              </li>
+            </ul>
+
+            @* <a class="sidebar-link" asp-area="" asp-controller="Employees" asp-action="EmployeesPage"> *@
+            @*   <iconify-icon icon="solar:user-broken" class="aside-icon"></iconify-icon> *@
+            @*   <span class="hide-menu">Funcionários</span> *@
+            @* </a> *@
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" asp-area="" asp-controller="Clients" asp-action="ClientsPage">
+              <iconify-icon icon="solar:user-hand-up-broken" class="aside-icon"></iconify-icon>
+              <span class="hide-menu">Clientes</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+    </div>
+  </aside>
+  <div class="page-wrapper">
+    <header class="topbar rounded-0 border-0 bg-primary">
+      <div class="with-vertical"><!-- ---------------------------------- -->
+        <!-- Start Vertical Layout Header -->
+        <!-- ---------------------------------- -->
+        <nav class="navbar navbar-expand-lg px-lg-0 px-3 py-0">
+          <div class="d-none d-lg-block">
+            <div class="brand-logo d-flex align-items-center justify-content-between">
+              <a href="~/main/index.html" class="text-nowrap logo-img d-flex align-items-center gap-2">
+                <b class="logo-icon">
+                  <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                  <!-- Dark Logo icon -->
+                  <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="dark-logo"/>
+                  <!-- Light Logo icon -->
+                  <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="light-logo"/>
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text -->
+                <span class="logo-text">
+                  <!-- dark Logo text -->
+                  <img src="~/images/logos/logo-light-text.svg" alt="homepage" class="dark-logo ps-2"/>
+                  <!-- Light Logo text -->
+                  <img src="~/images/logos/logo-light-text.svg" class="light-logo ps-2" alt="homepage"/>
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <ul class="navbar-nav gap-2">
+
+            <li class="nav-item nav-icon-hover-bg rounded-circle">
+              <a class="nav-link nav-icon-hover sidebartoggler" id="headerCollapse" href="javascript:void(0)">
+                <iconify-icon icon="solar:list-bold"></iconify-icon>
+              </a>
+            </li>
+          </ul>
+
+          <div class="d-block d-lg-none">
+            <div class="brand-logo d-flex align-items-center justify-content-between">
+              <a href="../main/index.html" class="text-nowrap logo-img d-flex align-items-center gap-2">
+                <b class="logo-icon">
+                  <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                  <!-- Dark Logo icon -->
+                  <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="dark-logo"/>
+                  <!-- Light Logo icon -->
+                  <img src="~/images/logos/logo-light-icon.svg" alt="homepage" class="light-logo"/>
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text -->
+                <span class="logo-text">
+                  <!-- dark Logo text -->
+                  <img src="~/images/logos/logo-light-text.svg" alt="homepage" class="dark-logo ps-2"/>
+                  <!-- Light Logo text -->
+                  <img src="~/images/logos/logo-light-text.svg" class="light-logo ps-2" alt="homepage"/>
+                </span>
+              </a>
+            </div>
+          </div>
+          <ul class="navbar-nav flex-row  gap-2 align-items-center justify-content-center d-flex d-lg-none">
+            <li class="nav-item dropdown nav-icon-hover-bg rounded-circle">
+              <a class="navbar-toggler nav-link text-white nav-icon-hover border-0" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="">
+                  <i class="ti ti-dots fs-7"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <div class="d-flex align-items-center justify-content-between py-2 py-lg-0">
+              <ul class="navbar-nav flex-row  align-items-center justify-content-center d-flex d-lg-none">
+                <li class="nav-item dropdown">
+                  <a href="javascript:void(0)" class="nav-link d-flex d-lg-none align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar" aria-controls="offcanvasWithBothOptions">
+                    <iconify-icon icon="solar:menu-dots-circle-linear"></iconify-icon>
+                  </a>
+                </li>
+                <li class="nav-item hover-dd dropdown nav-icon-hover-bg rounded-circle">
+                  <a class="nav-link nav-icon-hover waves-effect waves-dark" href="javascript:void(0)" id="drop2" aria-expanded="false">
+                    <iconify-icon icon="solar:bell-bing-line-duotone"></iconify-icon>
+                    <div class="notify">
+                      <span class="heartbit"></span>
+                      <span class="point"></span>
                     </div>
-                    <div class="message-body pb-3">
-                      <div class="px-3 pt-3">
-                        <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
-                          <a href="../main/page-user-profile.html" class=" d-flex  align-items-center ">
-                            My Profile
-                          </a>
+                  </a>
+                  <div class="dropdown-menu py-0 content-dd  dropdown-menu-animate-up overflow-hidden" aria-labelledby="drop2">
+
+                    <div class="py-3 px-4 bg-primary">
+                      <div class="mb-0 fs-6 fw-medium text-white">Notifications</div>
+                      <div class="mb-0 fs-2 fw-medium text-white">You have 4 Notifications</div>
+                    </div>
+                    <div class="message-body" data-simplebar>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center  dropdown-item gap-3   border-bottom">
+                        <span class="flex-shrink-0 bg-primary-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-primary">
+                          <iconify-icon icon="solar:widget-3-line-duotone"></iconify-icon>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Launch Admin</h6>
+                            <span class="fs-2 d-block text-muted ">9:30 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
                         </div>
-                        <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
-                          <a href="javascript:void(0)" class=" d-flex  align-items-center ">
-                            My Projects
-                          </a>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
+                        <span class="flex-shrink-0 bg-secondary-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-secondary">
+                          <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Event today</h6>
+                            <span class="fs-2 d-block text-muted ">9:10 AM</span>
+                          </div>
+
+                          <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
                         </div>
-                        <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
-                          <a href="../main/app-email.html" class=" d-flex  align-items-center ">
-                            Inbox
-                          </a>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
+                        <span class="flex-shrink-0 bg-danger-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-danger">
+                          <iconify-icon icon="solar:settings-minimalistic-line-duotone"></iconify-icon>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Settings</h6>
+                            <span class="fs-2 d-block text-muted ">9:08 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
+                        <span class="flex-shrink-0 bg-warning-subtle rounded-circle round-40 d-flex align-items-center justify-content-center fs-6 text-warning">
+                          <iconify-icon icon="solar:link-circle-line-duotone"></iconify-icon>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Luanch Admin</h6>
+                            <span class="fs-2 d-block text-muted ">9:30 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
+                        <span class="flex-shrink-0 bg-success-subtle rounded-circle round-40 d-flex align-items-center justify-content-center">
+                          <i data-feather="calendar" class="feather-sm fill-white text-success"></i>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Event today</h6>
+                            <span class="fs-2 d-block text-muted ">9:10 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3  border-bottom">
+                        <span class="flex-shrink-0 bg-info-subtle rounded-circle round-40 d-flex align-items-center justify-content-center">
+                          <i data-feather="settings" class="feather-sm fill-white text-info"></i>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Settings</h6>
+                            <span class="fs-2 d-block text-muted ">9:08 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="p-3">
+                      <a class="d-flex btn btn-primary  align-items-center justify-content-center gap-2" href="javascript:void(0);">
+                        <span>Check all Notifications</span>
+                        <iconify-icon icon="solar:alt-arrow-right-outline" class="iconify-sm"></iconify-icon>
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                <li class="nav-item hover-dd dropdown nav-icon-hover-bg rounded-circle">
+                  <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" aria-expanded="false">
+                    <iconify-icon icon="solar:inbox-line-line-duotone"></iconify-icon>
+                    <div class="notify">
+                      <span class="heartbit"></span>
+                      <span class="point"></span>
+                    </div>
+                  </a>
+                  <div class="dropdown-menu py-0 content-dd dropdown-menu-animate-up overflow-hidden" aria-labelledby="drop2">
+
+                    <div class="py-3 px-4 bg-secondary">
+                      <div class="mb-0 fs-6 fw-medium text-white">Messages</div>
+                      <div class="mb-0 fs-2 fw-medium text-white">You have 5 new messages</div>
+                    </div>
+                    <div class="message-body" data-simplebar>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
+                        <span class="user-img position-relative d-inline-block">
+                          <img src="~/images/profile/user-2.jpg" alt="user" class="rounded-circle w-100 round-40"/>
+                          <span class="profile-status bg-success position-absolute rounded-circle"></span>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Mathew Anderson</h6>
+                            <span class="fs-2 d-block text-muted">9:30 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
+                        <span class="user-img position-relative d-inline-block">
+                          <img src="~/images/profile/user-3.jpg" alt="user" class="rounded-circle w-100 round-40"/>
+                          <span class="profile-status bg-success position-absolute rounded-circle"></span>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Bianca Anderson</h6>
+                            <span class="fs-2 d-block text-muted">9:10 AM</span>
+                          </div>
+
+                          <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
+                        <span class="user-img position-relative d-inline-block">
+                          <img src="~/images/profile/user-4.jpg" alt="user" class="rounded-circle w-100 round-40"/>
+                          <span class="profile-status bg-success position-absolute rounded-circle"></span>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Andrew Johnson</h6>
+                            <span class="fs-2 d-block text-muted">9:08 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
+                        <span class="user-img position-relative d-inline-block">
+                          <img src="~/images/profile/user-5.jpg" alt="user" class="rounded-circle w-100 round-40"/>
+                          <span class="profile-status bg-success position-absolute rounded-circle"></span>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Miyra Strokes</h6>
+                            <span class="fs-2 d-block text-muted">9:30 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">Just see the my new admin!</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
+                        <span class="user-img position-relative d-inline-block">
+                          <img src="~/images/profile/user-6.jpg" alt="user" class="rounded-circle w-100 round-40"/>
+                          <span class="profile-status bg-success position-absolute rounded-circle"></span>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Mark, Stoinus & Rishvi..</h6>
+                            <span class="fs-2 d-block text-muted">9:10 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">Just a reminder that you have event</span>
+                        </div>
+                      </a>
+                      <a href="javascript:void(0)" class="p-3 d-flex align-items-center dropdown-item gap-3 border-bottom">
+                        <span class="user-img position-relative d-inline-block">
+                          <img src="~/images/profile/user-7.jpg" alt="user" class="rounded-circle w-100 round-40"/>
+                          <span class="profile-status bg-success position-absolute rounded-circle"></span>
+                        </span>
+                        <div class="w-80">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="mb-1">Eliga Rush</h6>
+                            <span class="fs-2 d-block text-muted">9:08 AM</span>
+                          </div>
+                          <span class="fs-2 d-block text-truncate text-muted">You can customize this template as you want</span>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="p-3">
+                      <a class="d-flex btn btn-secondary  align-items-center justify-content-center gap-2" href="javascript:void(0);">
+                        <span>Check all Messages</span>
+                        <iconify-icon icon="solar:alt-arrow-right-outline" class="iconify-sm"></iconify-icon>
+                      </a>
+                    </div>
+
+                  </div>
+                </li>
+              </ul>
+              <ul class="navbar-nav gap-2 flex-row ms-auto align-items-center justify-content-center">
+                <li class="nav-item nav-icon-hover-bg rounded-circle">
+                  <a class="nav-link nav-icon-hover moon dark-layout" href="javascript:void(0)">
+                    <iconify-icon icon="solar:moon-line-duotone" class="moon"></iconify-icon>
+                  </a>
+                  <a class="nav-link nav-icon-hover sun light-layout" href="javascript:void(0)">
+                    <iconify-icon icon="solar:sun-2-line-duotone" class="sun"></iconify-icon>
+                  </a>
+                </li>
+
+                <!-- ------------------------------- -->
+                <!-- start profile Dropdown -->
+                <!-- ------------------------------- -->
+                <li class="nav-item hover-dd dropdown">
+                  <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" aria-expanded="false">
+                    <img src="~/images/profile/user-1.jpg" alt="user" class="profile-pic rounded-circle round-30"/>
+                  </a>
+                  <div class="dropdown-menu pt-0 content-dd overflow-hidden pt-0 dropdown-menu-end user-dd" aria-labelledby="drop2">
+                    <div class="profile-dropdown position-relative" data-simplebar>
+                      <div class=" py-3 border-bottom">
+                        <div class="d-flex align-items-center px-3">
+                          <img src="~/images/profile/user-1.jpg" class="rounded-circle round-50" alt=""/>
+                          <div class="ms-3">
+                            <h5 class="mb-1 fs-4">Markarn Doe</h5>
+                            <p class="mb-0 fs-2 d-flex align-items-center text-muted">
+                              markrarn@wrappixel.com
+                            </p>
+                          </div>
                         </div>
                       </div>
-                      <hr>
-                      <div class="px-3">
-                        <div class="py-8 px-3 d-flex justify-content-between dropdown-item align-items-center h6 mb-0  rounded-2 link">
-                          <a href="javascript:void(0)" class="">
-                            Mode
-                          </a>
-                          <div>
-                            <a class="moon dark-layout" href="javascript:void(0)">
-                              <iconify-icon icon="solar:moon-line-duotone" class="moon"></iconify-icon>
+                      <div class="message-body pb-3">
+                        <div class="px-3 pt-3">
+                          <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
+                            <a href="../main/page-user-profile.html" class=" d-flex  align-items-center ">
+                              My Profile
                             </a>
-                            <a class="sun light-layout" href="javascript:void(0)">
-                              <iconify-icon icon="solar:sun-2-line-duotone" class="sun"></iconify-icon>
+                          </div>
+                          <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
+                            <a href="javascript:void(0)" class=" d-flex  align-items-center ">
+                              My Projects
+                            </a>
+                          </div>
+                          <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
+                            <a href="../main/app-email.html" class=" d-flex  align-items-center ">
+                              Inbox
                             </a>
                           </div>
                         </div>
-                        <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
-                          <a href="../main/page-account-settings.html" class=" d-flex  align-items-center  ">
-                            Account Settings
-                          </a>
-                        </div>
-                        <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
-                          <a href="../main/authentication-login.html" class=" d-flex  align-items-center ">
-                            Sign Out
-                          </a>
+                        <hr>
+                        <div class="px-3">
+                          <div class="py-8 px-3 d-flex justify-content-between dropdown-item align-items-center h6 mb-0  rounded-2 link">
+                            <a href="javascript:void(0)" class="">
+                              Mode
+                            </a>
+                            <div>
+                              <a class="moon dark-layout" href="javascript:void(0)">
+                                <iconify-icon icon="solar:moon-line-duotone" class="moon"></iconify-icon>
+                              </a>
+                              <a class="sun light-layout" href="javascript:void(0)">
+                                <iconify-icon icon="solar:sun-2-line-duotone" class="sun"></iconify-icon>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
+                            <a href="../main/page-account-settings.html" class=" d-flex  align-items-center  ">
+                              Account Settings
+                            </a>
+                          </div>
+                          <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
+                            <a href="../main/authentication-login.html" class=" d-flex  align-items-center ">
+                              Sign Out
+                            </a>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
+                    </div>
                   </div>
-                </div>
-              </li>
-              <!-- ------------------------------- -->
-              <!-- end profile Dropdown -->
-              <!-- ------------------------------- -->
-            </ul>
+                </li>
+                <!-- ------------------------------- -->
+                <!-- end profile Dropdown -->
+                <!-- ------------------------------- -->
+              </ul>
+            </div>
           </div>
-        </div>
-      </nav>
-      <!-- ---------------------------------- -->
-      <!-- End Vertical Layout Header -->
-      <!-- ---------------------------------- -->
-    </div>
-  </header>
-  
-  <div class="body-wrapper">
-    <div class="container-fluid">
-      @RenderBody()
+        </nav>
+        <!-- ---------------------------------- -->
+        <!-- End Vertical Layout Header -->
+        <!-- ---------------------------------- -->
+      </div>
+    </header>
+
+    <div class="body-wrapper">
+      <div class="container-fluid">
+        @RenderBody()
+      </div>
     </div>
   </div>
 </div>
-</div>
 
 <script src="~/libs/jquery/dist/jquery.min.js"></script>
+
 <script src="~/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/libs/simplebar/dist/simplebar.min.js"></script>
 <script src="~/js/theme/app.init.js"></script>
@@ -470,11 +493,11 @@
 <script src="~/js/theme/app.min.js"></script>
 <script src="~/js/theme/sidebarmenu.js"></script>
 <script src="~/js/theme/feather.min.js"></script>
+<script src="~/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 
 <!-- solar icons -->
 <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
 
-<script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -70,4 +70,12 @@ public static class GeneralUtils
 
         return value % maxExclusive;
     }
+
+    public static string GetEditDeleteButtons(int id, string delFuncName, string edtFuncName)
+    {
+        return $"<div class=\"d-flex justify-content-end\">" +
+               $"<button type=\"button\" class=\"btn bg-primary-subtle rounded-circle round d-inline-flex align-items-center justify-content-center me-2\" onclick=\"{edtFuncName}('{id}')\"> <iconify-icon icon=\"solar:pen-new-round-broken\" class=\"nav-small-cap-icon fs-6\"></iconify-icon> </button>" +
+               $"<button type=\"button\" class=\"btn bg-danger-subtle text-danger rounded-circle round d-inline-flex align-items-center justify-content-center\" onclick=\"{delFuncName}('{id}')\"> <iconify-icon icon=\"solar:trash-bin-2-broken\" class=\"nav-small-cap-icon fs-6\"></iconify-icon> </button>" +
+               $"</div>";
+    }
 }

@@ -1,0 +1,19 @@
+#start ADD MIGRATION COMMAND  #
+dotnet ef migrations add \
+  --project LCalendar/LCalendar.csproj \
+  --startup-project LCalendar/LCalendar.csproj \
+  --context AppDbContext \
+  --configuration Debug \
+  --framework net8.0 \
+  "estimated and default times for the duties" \
+  --output-dir Migrations
+#end SCAFFOLDING COMMAND    #
+
+#start UPDATE DATABASE COMMAND  #
+dotnet ef database update \
+  --project LCalendar/LCalendar.csproj \
+  --startup-project LCalendar/LCalendar.csproj \
+  --context AppDbContext \
+  --configuration Debug \
+  --framework net8.0
+#end UPDATE DATABASE COMMAND    #

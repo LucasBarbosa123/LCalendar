@@ -6,4 +6,5 @@ public class EmployeeDutie
     
     public int EmployeeId { get; set; }
     public int DutyId { get; set; }
+    public TimeSpan EstimatedTime { get; set; }
 }

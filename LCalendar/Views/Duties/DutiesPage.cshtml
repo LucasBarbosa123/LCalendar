@@ -1,0 +1,267 @@
+@{
+    ViewData["Title"] = "Funções";
+}
+
+<h4 class="font-weight-medium  mb-0">Funções</h4>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a class="text-muted text-decoration-none" href="">Funcionários
+            </a>
+        </li>
+        <li class="breadcrumb-item text-muted" aria-current="page">Funções</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <!-- BUTTON FOR THE DUTIE MODAL -->
+        <div id="dutieButtonWrapper">
+            <button type="button" class="btn btn-primary mb-2 d-flex align-items-center" onclick="openDutieModal()">
+                <iconify-icon icon="solar:add-circle-broken" class="nav-small-cap-icon fs-6 me-1"></iconify-icon>
+                Função
+            </button>
+        </div>
+        
+        <div class="table-responsive">
+            <table id="dutieTable" class="table w-100 table-bordered datatable-select-inputs text-nowrap">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Duração Media</th>
+                    <th>Criada Em</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- DUTIE MODAL -->
+<div class="modal fade" id="dutieModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header d-flex align-items-center">
+        <h4 class="modal-title" id="dutieModalTitle">
+          Vertically centered Modal
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" onclick="clearAndCloseDutieModal()"></button>
+      </div>
+      <div class="modal-body">
+          <div class="form-floating mb-3">
+              <input type="text" class="form-control" placeholder="Nome" id="dutieName" />
+              <label>
+                  <i class="ti ti-lock me-2 fs-4"></i>
+                  <span class="border-start ps-3">Nome</span>
+              </label>
+          </div>
+          <div class="form-floating mb-3">
+              <input class="form-control" type="time" value="00:00" id="dutieDefaultTime">
+              <label>
+                  <i class="ti ti-lock me-2 fs-4"></i>Confirm
+                  Tempo Medio
+              </label>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="clearAndCloseDutieModal()">
+              Close
+          </button>
+          <button id="dutieModalButton" type="button" class="btn bg-primary-subtle waves-effect text-start" onclick="createUpdateDutie()">
+              Criar
+          </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DUTIE MODAL -->
+<div class="modal fade" id="dutieModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="dutieModalTitle">
+                    Vertically centered Modal
+                </h4>
+                <button type="button" class="btn-close" aria-label="Close" onclick="clearAndCloseDutieModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Nome" id="dutieName" />
+                    <label>
+                        <i class="ti ti-lock me-2 fs-4"></i>
+                        <span class="border-start ps-3">Nome</span>
+                    </label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="time" value="00:00" id="dutieDefaultTime">
+                    <label>
+                        <i class="ti ti-lock me-2 fs-4"></i>Confirm
+                        Tempo Medio
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="clearAndCloseDutieModal()">
+                    Cancelar
+                </button>
+                <button id="dutieModalButton" type="button" class="btn bg-primary-subtle waves-effect text-start" onclick="createUpdateDutie()">
+                    Criar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dutieDelitionModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myLargeModalLabel">
+                    Eliminar Função
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" closeDutieDelitionModal()></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Tem a creteza que pretende eliminar esta marcação?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="closeDutieDelitionModal()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger  waves-effect text-start" onclick="deleteDutie()">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let table
+    let dutieBeingEdited = 0
+    let dutieBeenEliminated = 0
+    
+    //function that handles all the things that should happend on the page render
+    runAfterRender(() => {
+        let tableId= 'dutieTable';
+        
+        table = $(`#${tableId}`).DataTable({
+            ajax: {
+                url: '/Duties/GetAllDutiesInfos',
+                dataSrc: '' // tells DataTables to use the root array
+            },
+            columns: [
+                { data: 'name' },
+                { data: 'defaultTime' },
+                { data: 'creationTime' },
+                { data: 'buttons' }
+            ],
+            responsive: true,
+        })
+        addjustDataTablesTopSection(tableId, 'dutieButtonWrapper')
+    })
+
+    //functions to handle onclick
+    function openDutieModal() {
+        changeDutieModalsButtonText('Criar')
+        showModal('dutieModal')
+    }
+    function clearAndCloseDutieModal() {
+        dutieBeingEdited = 0
+
+        let modalId = 'dutieModal'
+        clearModal(modalId)
+        hideModal(modalId)
+    }
+    async function deleteDutie() {
+        try {
+            const res = await fetch(`/Duties/DeleteDutie?id=${dutieBeenEliminated}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+        } catch (error) {
+            console.error('Error deleting dutie:', error);
+        }
+
+        closeDutieDelitionModal()
+        reloadDutiesTable()
+    }
+    async function startDutieEdition(id) {
+        let dutieInfo
+        
+        try {
+            const res = await fetch(`/Duties/GetDutieInfo?id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+
+            dutieInfo = await res.json()
+        } catch (error) {
+            console.error('Error creating appointment:', error);
+        }
+
+        document.getElementById('dutieName').value = dutieInfo.name
+        document.getElementById('dutieDefaultTime').value = dutieInfo.defaultTime
+
+        dutieBeingEdited = id
+
+        changeDutieModalsButtonText('Atualizar')
+        showModal('dutieModal')
+    }
+    async function createUpdateDutie() {
+        let dutieInfo = {
+            name: document.getElementById('dutieName').value,
+            defaultTime: document.getElementById('dutieDefaultTime').value
+        }
+
+        try {
+            if (dutieBeingEdited == 0) {
+                const res = await fetch('/Duties/CreateDutie', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dutieInfo)
+                })
+            }
+            else {
+                const res = await fetch(`/Duties/UpdateDutie?id=${dutieBeingEdited}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dutieInfo)
+                })
+            }
+        } catch (error) {
+            console.error('Error creating or updating appointment:', error);
+        }
+
+        clearAndCloseDutieModal()
+        reloadDutiesTable()
+    }
+    function startDutieDelition(id) {
+        dutieBeenEliminated = id
+        showModal('dutieDelitionModal')
+    }
+    function closeDutieDelitionModal() {
+        dutieBeenEliminated = 0
+        hideModal('dutieDelitionModal')
+    }
+    
+    //support functions for the ofunctions above
+    function changeDutieModalsButtonText(text) {
+        document.getElementById('dutieModalButton').textContent = text
+    }
+    function reloadDutiesTable() {
+        table.ajax.reload()
+    }
+</script>
