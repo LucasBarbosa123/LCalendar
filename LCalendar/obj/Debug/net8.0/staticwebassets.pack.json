@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets/css/plugins/owl-carousel.css"
     },
     {
+      "Id": "/home/lukill/RiderProjects/LCalendar/LCalendar/wwwroot/css/site.css",
+      "PackagePath": "staticwebassets/css/site.css"
+    },
+    {
       "Id": "/home/lukill/RiderProjects/LCalendar/LCalendar/wwwroot/css/styles-rtl.css",
       "PackagePath": "staticwebassets/css/styles-rtl.css"
     },

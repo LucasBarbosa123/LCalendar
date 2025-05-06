@@ -9,14 +9,9 @@
     <link rel="stylesheet" href="~/libs/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/LCalendar.styles.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/css/styles.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-
-
-
-
-
-
 <div id="main-wrapper">
 <aside class="left-sidebar with-vertical">
     <div>
@@ -48,25 +43,40 @@
                 <!-- ---------------------------------- -->
                 <li class="sidebar-item">
                     <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <iconify-icon icon="solar:screencast-2-linear" class="aside-icon" id="get-url"></iconify-icon>
+                        <iconify-icon icon="solar:home-broken" class="aside-icon" id="get-url"></iconify-icon>
                         <span class="hide-menu">Início</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" asp-area="" asp-controller="Apointments" asp-action="CalendarPage">
-                        <iconify-icon icon="solar:screencast-2-linear" class="aside-icon"></iconify-icon>
+                  <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                    <iconify-icon icon="solar:home-angle-linear" class="aside-icon"></iconify-icon>
+                    <span class="hide-menu">Marcações</span>
+                  </a>
+                  <ul aria-expanded="false" class="collapse first-level">
+                    <li class="sidebar-item">
+                      <a class="sidebar-link sublink" a class="sidebar-link" asp-area="" asp-controller="Apointments" asp-action="CalendarPage">
+                        <div class="round-16 d-flex align-items-center justify-content-center">
+                          <iconify-icon icon="solar:calendar-broken" class="aside-icon"></iconify-icon>
+                        </div>
                         <span class="hide-menu">Calendário</span>
-                    </a>
+                      </a>
+                    </li>
+                  </ul>
+                  
+                  @* <a class="sidebar-link" asp-area="" asp-controller="Apointments" asp-action="CalendarPage"> *@
+                  @*   <iconify-icon icon="solar:calendar-broken" class="aside-icon"></iconify-icon> *@
+                  @*   <span class="hide-menu">Calendário</span> *@
+                  @* </a> *@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" asp-area="" asp-controller="Employees" asp-action="EmployeesPage">
-                        <iconify-icon icon="solar:screencast-2-linear" class="aside-icon"></iconify-icon>
+                        <iconify-icon icon="solar:user-broken" class="aside-icon"></iconify-icon>
                         <span class="hide-menu">Funcionários</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" asp-area="" asp-controller="Clients" asp-action="ClientsPage">
-                        <iconify-icon icon="solar:screencast-2-linear" class="aside-icon"></iconify-icon>
+                        <iconify-icon icon="solar:user-hand-up-broken" class="aside-icon"></iconify-icon>
                         <span class="hide-menu">Clientes</span>
                     </a>
                 </li>
@@ -75,7 +85,6 @@
         </nav>
     </div>
 </aside>
-
 <div class="page-wrapper">
   <header class="topbar rounded-0 border-0 bg-primary">
     <div class="with-vertical"><!-- ---------------------------------- -->
@@ -246,11 +255,6 @@
                       <iconify-icon icon="solar:alt-arrow-right-outline" class="iconify-sm"></iconify-icon>
                     </a>
                   </div>
-
-
-
-
-
                 </div>
               </li>
               <li class="nav-item hover-dd dropdown nav-icon-hover-bg rounded-circle">
@@ -437,8 +441,6 @@
                   </div>
                 </div>
               </li>
-
-
               <!-- ------------------------------- -->
               <!-- end profile Dropdown -->
               <!-- ------------------------------- -->
@@ -461,8 +463,6 @@
 </div>
 
 <script src="~/libs/jquery/dist/jquery.min.js"></script>
-<script src="~/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
 <script src="~/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/libs/simplebar/dist/simplebar.min.js"></script>
 <script src="~/js/theme/app.init.js"></script>
