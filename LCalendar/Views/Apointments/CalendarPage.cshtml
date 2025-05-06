@@ -1,20 +1,26 @@
 ﻿@{
     ViewData["Title"] = "Calendar";
 }
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+@* <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script> *@
 
-<div class="text-center">
-    <h1 class="display-4">Calendário</h1>
-    <div id="calendar"></div>
-</div>
+@* <div class="text-center"> *@
+@*     <h1 class="display-4">Calendário</h1> *@
+@*     <div id="calendar"></div> *@
+@* </div> *@
 
-<div class="row justify-content-end">
-    <div class="pt-3" style="width: fit-content">
-        <button class="btn btn-primary" onclick="openCreationModal()">
-            Adicionar Marcação
-        </button>
+<div class="card">
+    <div class="card-body calender-sidebar app-calendar">
+        <div id="calendar"></div>
     </div>
 </div>
+
+@* <div class="row justify-content-end"> *@
+@*     <div class="pt-3" style="width: fit-content"> *@
+@*         <button class="btn btn-primary" onclick="openCreationModal()"> *@
+@*             Adicionar Marcação *@
+@*         </button> *@
+@*     </div> *@
+@* </div> *@
 
 @* BOOTSTRAP MODAL FOR CREATING THE APOINTMENTS *@
 <div class="modal fade" id="createApointmentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -74,7 +80,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="clearAndCloseCreationModal()">Cancelar</button>
+                <button type="button" class="btn btn-light" onclick="clearAndCloseCreationModal()">Cancelar</button>
                 <button type="button" class="btn btn-primary" id="createUpdateButton" onclick="createUpdateAppointment()">Criar</button>
             </div>
         </div>
@@ -108,15 +114,31 @@
       let calendar
       let popUpAppointmentsId = 0
       let appointmentBeingEditedId = 0
+
+      let calendarHeaderToolbar = {
+          left: "prev next addEventButton",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+      }
       
       //calendar part
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'timeGridWeek',
+          height: "auto",
+          initialView: checkWidowWidth() ? "timeGridDay" : "timeGridWeek",
+          headerToolbar: calendarHeaderToolbar,
+          customButtons: {
+              addEventButton: {
+                  text: "Adicionar Marcação",
+                  click: openCreationModal,
+              },
+          },
+          eventClassNames: function ({ event: calendarEvent }) {    //for now we will let them be all the same color
+              return ["event-fc-color fc-bg-success"];
+          },
           slotMinTime: '08:00:00',
           slotMaxTime: '18:00:00',
-          height: 'auto',
           events: function(fetchInfo, successCallback, failureCallback) {
               // fetchInfo has start and end dates
               fetch('/Apointments/GetCalendarEvents?start=' + encodeURIComponent(fetchInfo.startStr) + '&end=' + encodeURIComponent(fetchInfo.endStr))
@@ -251,3 +273,6 @@
           document.getElementById('createUpdateButton').textContent = text
       }
 </script>
+
+<script src="~/libs/fullcalendar/index.global.min.js"></script>
+<script src="~/js/apps/calendar-init.js"></script>

@@ -24,3 +24,10 @@ function showModal(modalId) {
     const myModal = new bootstrap.Modal(document.getElementById(modalId))
     myModal.show()
 }
+var checkWidowWidth = function () {
+    if (window.innerWidth <= 1199) {
+        return true;
+    } else {
+        return false;
+    }
+}

@@ -21,4 +21,21 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\css\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\calendar-init.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\chat.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\contact.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\ecommerce.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\edit-product.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\invoice.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\jquery.PrintArea.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\kanban.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\notes.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\apps\productDetail.js" />
+    </ItemGroup>
+
 </Project>
