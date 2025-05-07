@@ -27,3 +27,8 @@ td {
 table tbody tr td:last-child {
     padding: 5px 15px;
 }
+
+table tbody tr td:last-child,
+table thead tr th:last-child {
+    width: min-content !important;
+}

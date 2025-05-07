@@ -79,7 +79,7 @@ public class DutiesController (AppDbContext dbContext) : Controller
             name = d.Name,
             defaultTime = (d.DefaultTime ?? TimeSpan.Zero).ToString(@"hh\:mm"),
             creationTime = d.CreationTime,
-            buttons = GeneralUtils.GetEditDeleteButtons(d.Id, "startDutieDelition", "startDutieEdition")
+            buttons = GeneralUtils.GetTableEditDeleteButtons(d.Id, "startDutieDelition", "startDutieEdition")
         }).ToList();
 
         return Ok(duties);

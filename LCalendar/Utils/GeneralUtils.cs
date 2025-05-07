@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using LCalendar.Dtos;
 
 namespace LCalendar.Utils;
 
@@ -71,11 +72,35 @@ public static class GeneralUtils
         return value % maxExclusive;
     }
 
-    public static string GetEditDeleteButtons(int id, string delFuncName, string edtFuncName)
+    //basically we allways need some buttons for the datatables's tables so we generate them here
+    public static string GetTableEditDeleteButtons(int id, string delFuncName, string edtFuncName)
     {
         return $"<div class=\"d-flex justify-content-end\">" +
-               $"<button type=\"button\" class=\"btn bg-primary-subtle rounded-circle round d-inline-flex align-items-center justify-content-center me-2\" onclick=\"{edtFuncName}('{id}')\"> <iconify-icon icon=\"solar:pen-new-round-broken\" class=\"nav-small-cap-icon fs-6\"></iconify-icon> </button>" +
-               $"<button type=\"button\" class=\"btn bg-danger-subtle text-danger rounded-circle round d-inline-flex align-items-center justify-content-center\" onclick=\"{delFuncName}('{id}')\"> <iconify-icon icon=\"solar:trash-bin-2-broken\" class=\"nav-small-cap-icon fs-6\"></iconify-icon> </button>" +
+               $"<button type=\"button\" class=\"btn bg-primary-subtle rounded-circle round-40 d-inline-flex align-items-center justify-content-center me-2\" onclick=\"{edtFuncName}('{id}')\"> <iconify-icon icon=\"solar:pen-new-round-broken\" class=\"nav-small-cap-icon fs-6\"></iconify-icon> </button>" +
+               $"<button type=\"button\" class=\"btn bg-danger-subtle text-danger rounded-circle round-40 d-inline-flex align-items-center justify-content-center\" onclick=\"{delFuncName}('{id}')\"> <iconify-icon icon=\"solar:trash-bin-2-broken\" class=\"nav-small-cap-icon fs-6\"></iconify-icon> </button>" +
                $"</div>";
+    }
+    public static string ConvertToTableButtonsDivStr(this List<TableButton> tableButtons)
+    {
+        var strartDivTag = "<div class=\"d-flex justify-content-end\">";
+        var endtDivTag = "</div>";
+
+        var buttons = "";
+        for (int i = 0; i < tableButtons.Count; i++)
+        {
+            var tableButton = tableButtons[i];
+            bool isLast = (i == tableButtons.Count - 1);
+
+            if (isLast)
+            {
+                buttons += $" {tableButton.ToString("me-2")} ";
+            }
+            else
+            {
+                buttons += $" {tableButton.ToString()} ";
+            }
+        }
+        
+        return $"{strartDivTag}{buttons}{endtDivTag}";
     }
 }
