@@ -15,7 +15,7 @@
         <th>Nome</th>
         <th>Email</th>
         <th>CreationTime</th>
-        <th>RoleId</th>
+        <th>Tipo de Perfil</th>
         <th></th>
     </tr>
     </thead>
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="my-1">
-                    <label> Função </label>
+                    <label> Tipo de Perfil </label>
                     <select class="form-select" id="employeeRole">
                         <option value="0">-</option>
                         @foreach (Role role in ViewBag.Roles)
@@ -132,8 +132,6 @@
 
         document.getElementById('employeeName').value = employeeInfo.name
         document.getElementById('employeeEmail').value = employeeInfo.email
-        document.getElementById('employeePassword').value = employeeInfo.password
-        document.getElementById('employeePasswordConfirmation').value = employeeInfo.passwordConfirmation
         document.getElementById('employeeRole').value = employeeInfo.roleId
 
         employeeIdBeingEdited = id

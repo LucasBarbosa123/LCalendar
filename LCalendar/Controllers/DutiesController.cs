@@ -9,8 +9,6 @@ public class DutiesController (AppDbContext dbContext) : Controller
     // GET
     public IActionResult DutiesPage()
     {
-        var duties = dbContext.Duties.ToList();
-        ViewBag.Duties = duties;
         return View();
     }
 
