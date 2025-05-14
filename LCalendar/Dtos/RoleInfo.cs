@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using LCalendar.Models;
 
 namespace LCalendar.Dtos;
 
 public class RoleInfo
 {
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
 

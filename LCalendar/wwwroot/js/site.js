@@ -5,6 +5,11 @@ function clearModal(modalId) {
     modalInputs.forEach(modalInput => {
         modalInput.value = getInputDefaultValue(modalInput.type)
     })
+
+    let modalSelects = modal.querySelectorAll('select')
+    modalSelects.forEach(modalSelect => {
+        modalSelect.selectedIndex = 0
+    })
 }
 
 const getInputDefaultValue = (type) => inputTypesDefaultValues[type]
@@ -12,7 +17,8 @@ let inputTypesDefaultValues = {
     text : "",
     number: 0,
     date: "",
-    time: ""
+    time: "",
+    password: ""
 }
 
 function hideModal(modalId) {

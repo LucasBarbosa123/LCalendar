@@ -1,76 +1,85 @@
-@using LCalendar.Dtos
 @{
     ViewData["Title"] = "Employees";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Funcionários</h1>
+<div class="d-flex align-items-center">
+    <iconify-icon icon="solar:chair-2-broken" class="aside-icon fs-5 me-1"></iconify-icon>
+    <h4 class="font-weight-medium  mb-0">Funcionários</h4>
 </div>
 
-<button type="button" class="btn btn-primary" onclick="openEmployeeModal()">Criar Funcinário</button>
+<nav class="mb-4" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a class="text-muted text-decoration-none" href="">Funcionários
+            </a>
+        </li>
+        <li class="breadcrumb-item text-muted" aria-current="page">Funcionários</li>
+    </ol>
+</nav>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Nome</th>
-        <th>Email</th>
-        <th>CreationTime</th>
-        <th>Tipo de Perfil</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (FullEmplyeeInfo employee in ViewBag.Employees)
-    {
-        <tr>
-            <td>@employee.Employee?.Name</td>
-            <td>@employee.Employee?.Email</td>
-            <td>@employee.Employee?.CreationTime</td>
-            <td>@(employee.Role?.Name ?? "")</td>
-            <td>
-                <button type="button" class="btn btn-primary" onclick="startEmployeeEdition('@employee.Employee?.Id')">Editar</button>
-                <button type="button" class="btn btn-danger" onclick="deleteEmployee('@employee.Employee?.Id')">Apagar</button>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-body">
+        <!-- BUTTON FOR THE EMPLOYEE MODAL -->
+        <div id="employeeButtonWrapper">
+            <button type="button" class="btn btn-primary mb-2 d-flex align-items-center" onclick="openEmployeeModal()">
+                <iconify-icon icon="solar:add-circle-broken" class="nav-small-cap-icon fs-6 me-1"></iconify-icon>
+                Funcionário
+            </button>
+        </div>
+        
+        <div class="table-responsive">
+            <table id="employeeTable" class="table w-100 table-bordered datatable-select-inputs text-nowrap">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Tipo de Perfil</th>
+                    <th>Data de Criação</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
 
-@* BOOTSTRAP MODAL FOR THE CREATION AND EDITING OF EMPLOYEES *@
-<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<!-- EMPLOYEE MODAL -->
+<div class="modal fade" id="employeeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"  aria-labelledby="vertical-center-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="employeeModalTitle"></h5>
-                <button type="button" class="btn-close" onclick="clearAndCloseEmployeeModal()" aria-label="Close"></button>
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="employeeModalTitle">
+                    Criar
+                </h4>
+                <button type="button" class="btn-close" aria-label="Close" onclick="clearAndCloseEmployeeModal()"></button>
             </div>
-            <div id="employeeModalBody" class="modal-body">
-                <div class="my-1">
-                    <label> Nome </label>
-                    <input class="form-control" type="text" id="employeeName" placeholder="Nome">
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Nome" id="employeeName" />
+                    <label>
+                        <iconify-icon icon="solar:user-broken" class="aside-icon fs-5 me-1"></iconify-icon>
+                        <span class="border-start ps-3">Nome</span>
+                    </label>
                 </div>
-                
-                <div class="my-1">
-                    <label> Email </label>
-                    <input class="form-control" type="text" id="employeeEmail" placeholder="Email">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Email" id="employeeEmail" />
+                    <label>
+                        <iconify-icon icon="solar:letter-broken" class="aside-icon fs-5 me-1"></iconify-icon>
+                        <span class="border-start ps-3">Email</span>
+                    </label>
                 </div>
-
-                <div id="passwordDiv">
-                    <div class="my-1">
-                        <label> Password </label>
-                        <input class="form-control" type="password" id="employeePassword" placeholder="********">
+                <div id="passwordDiv" class="form-floating mb-3">
+                    <input type="password" class="form-control" id="employeePassword" placeholder="Password">
+                    <label for="employeePassword">
+                        <iconify-icon icon="solar:lock-keyhole-minimalistic-unlocked-broken" class="aside-icon fs-5 me-1"></iconify-icon>
+                        <span class="border-start ps-3">Password</span>
+                    </label>
+                    <div class="position-absolute top-0 end-0 pe-2 pt-2">
+                        <button class="btn btn-sm bg-secondary-subtle text-secondary" type="button" onclick="generateRandomPassword()">Gerar</button>
                     </div>
-                
-                    <div class="my-1">
-                        <label> Confirmar Password </label>
-                        <input class="form-control" type="password" id="employeePasswordConfirmation" placeholder="********">
-                    </div>
                 </div>
-
-                <div class="my-1">
-                    <label> Tipo de Perfil </label>
-                    <select class="form-select" id="employeeRole">
-                        <option value="0">-</option>
+                <div class="form-group mb-3">
+                    <label for="employeeRole">Tipo de Perfil</label>
+                    <select class="form-control" id="employeeRole">
                         @foreach (Role role in ViewBag.Roles)
                         {
                             <option value="@role.Id">@role.Name</option>
@@ -79,44 +88,102 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="col-6 d-flex justify-content-start mx-0">
-                    <button type="button" class="btn btn-secondary" onclick="clearAndCloseEmployeeModal()">Cancelar</button>
-                </div>
-                <div class="col-6 d-flex justify-content-end mx-0">
-                    <button type="button" class="btn btn-primary" id="createUpdateButton" onclick="createUpdateEmployee()">Criar</button>
-                </div>
+                <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="clearAndCloseEmployeeModal()">
+                    Close
+                </button>
+                <button id="employeeModalButton" type="button" class="btn bg-primary-subtle waves-effect text-start" onclick="createUpdateEmployee()">
+                    Criar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="employeeDelitionModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myLargeModalLabel">
+                    Eliminar Funcionário
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" closeEmployeeDelitionModal()></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Tem a creteza que pretende eliminar este funcionário?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="closeEmployeeDelitionModal()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger  waves-effect text-start" onclick="deleteEmployee()">
+                    Eliminar
+                </button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    //page variables
-    let employeeIdBeingEdited = 0
+    let table
+    let employeeBeingEdited = 0
+    let employeeBeenEliminated = 0
     
+    //function that handles all the things that should happend on the page render
+    runAfterRender(() => {
+        let tableId= 'employeeTable';
+        
+        table = $(`#${tableId}`).DataTable({
+            ajax: {
+                url: '/Employees/GetAllEmployeesInfos',
+                dataSrc: '' // tells DataTables to use the root array
+            },
+            columns: [
+                { data: 'name' },
+                { data: 'email' },
+                { data: 'role' },
+                { data: 'creationTime' },
+                { data: 'buttons' }
+            ],
+            responsive: true,
+        })
+        addjustDataTablesTopSection(tableId, 'employeeButtonWrapper')
+    })
+
     //functions to handle onclick
     function openEmployeeModal() {
-        document.getElementById('passwordDiv').classList.remove('d-none')
+        changeEmployeeModalsTitleText('Criar Funcionário')
         changeEmployeeModalsButtonText('Criar')
+
+        document.getElementById('passwordDiv').classList.remove('d-none')
         showModal('employeeModal')
     }
-    async function deleteEmployee(id) {
+    function clearAndCloseEmployeeModal() {
+        employeeBeingEdited = 0
+
+        let modalId = 'employeeModal'
+        clearModal(modalId)
+        hideModal(modalId)
+    }
+    async function deleteEmployee() {
         try {
-            const res = await fetch(`/Employees/DeleteEmployee?id=${id}`, {
+            const res = await fetch(`/Employees/DeleteEmployee?id=${employeeBeenEliminated}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 },
             })
         } catch (error) {
-            console.error('Error deleting appointment:', error);
+            console.error('Error deleting employee:', error);
         }
-        
+
+        closeEmployeeDelitionModal()
         reloadEmployeesTable()
     }
     async function startEmployeeEdition(id) {
         let employeeInfo
-        //get the apointment data and fill the createApointmentModal fields
+        
         try {
             const res = await fetch(`/Employees/GetEmployeeInfo?id=${id}`, {
                 method: 'GET',
@@ -133,31 +200,27 @@
         document.getElementById('employeeName').value = employeeInfo.name
         document.getElementById('employeeEmail').value = employeeInfo.email
         document.getElementById('employeeRole').value = employeeInfo.roleId
+        document.getElementById('employeePassword').value = ''
 
-        employeeIdBeingEdited = id
-        
-        document.getElementById('passwordDiv').classList.add('d-none')
+        employeeBeingEdited = id
+
         changeEmployeeModalsButtonText('Atualizar')
+        changeEmployeeModalsTitleText('Editar Funcionário')
+
+        document.getElementById('passwordDiv').classList.add('d-none')
         showModal('employeeModal')
-    }
-    function clearAndCloseEmployeeModal() {
-        employeeIdBeingEdited = 0
-        
-        let modalId = 'employeeModal'
-        clearModal(modalId)
-        hideModal(modalId)
     }
     async function createUpdateEmployee() {
         let employeeInfo = {
             name: document.getElementById('employeeName').value,
             email: document.getElementById('employeeEmail').value,
             password: document.getElementById('employeePassword').value,
-            passwordConfirmation: document.getElementById('employeePasswordConfirmation').value,
             roleId: document.getElementById('employeeRole').value,
+            img: ''
         }
 
         try {
-            if (employeeIdBeingEdited == 0) {
+            if (employeeBeingEdited == 0) {
                 const res = await fetch('/Employees/CreateEmployee', {
                     method: 'POST',
                     headers: {
@@ -167,7 +230,7 @@
                 })
             }
             else {
-                const res = await fetch(`/Employees/UpdateEmployee?id=${employeeIdBeingEdited}`, {
+                const res = await fetch(`/Employees/UpdateEmployee?id=${employeeBeingEdited}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -178,16 +241,46 @@
         } catch (error) {
             console.error('Error creating or updating appointment:', error);
         }
-        
+
         clearAndCloseEmployeeModal()
         reloadEmployeesTable()
     }
+    function startEmployeeDelition(id) {
+        employeeBeenEliminated = id
+        showModal('employeeDelitionModal')
+    }
+    function closeEmployeeDelitionModal() {
+        employeeBeenEliminated = 0
+        hideModal('employeeDelitionModal')
+    }
+    async function generateRandomPassword() {
+        let passInput = document.getElementById('employeePassword')
+        let radomPass = ''
+        
+        try {
+            const res = await fetch(`/Utils/GetGeneratedPassword`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
 
+            radomPass = await res.json()
+        } catch (error) {
+            console.error('Error getting random password:', error);
+        }
+
+        passInput.value = radomPass.generatedPass
+    }
+    
     //support functions for the ofunctions above
     function changeEmployeeModalsButtonText(text) {
-        document.getElementById('createUpdateButton').textContent = text
+        document.getElementById('employeeModalButton').textContent = text
+    }
+    function changeEmployeeModalsTitleText(text) {
+        document.getElementById('employeeModalTitle').textContent = text
     }
     function reloadEmployeesTable() {
-        location.reload()
+        table.ajax.reload()
     }
 </script>

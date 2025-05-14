@@ -5,7 +5,7 @@ dotnet ef migrations add \
   --context AppDbContext \
   --configuration Debug \
   --framework net8.0 \
-  "estimated and default times for the duties" \
+  "TEXT" \
   --output-dir Migrations
 #end SCAFFOLDING COMMAND    #
 

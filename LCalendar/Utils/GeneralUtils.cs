@@ -45,6 +45,7 @@ public static class GeneralUtils
         const string lower = "abcdefghijklmnopqrstuvwxyz";
         const string digits = "0123456789";
         const string special = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+        string allChars = upper + lower + digits + special;
 
         var random = RandomNumberGenerator.Create();
         var result = new char[length];
@@ -54,6 +55,11 @@ public static class GeneralUtils
         result[1] = lower[GetRandomIndex(random, lower.Length)];
         result[2] = digits[GetRandomIndex(random, digits.Length)];
         result[3] = special[GetRandomIndex(random, special.Length)];
+        
+        for (int i = (length-4); i < length; i++)
+        {
+            result[i] = allChars[GetRandomIndex(random, allChars.Length)];
+        }
 
         // Shuffle to avoid predictable character placement
         return new string(result.OrderBy(_ => GetRandomIndex(random, int.MaxValue)).ToArray());

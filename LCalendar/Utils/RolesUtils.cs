@@ -12,4 +12,10 @@ public static class RolesUtils
 
         return roleInfo;
     }
+    
+    public static string GetRoleNameById(int id, AppDbContext dbContext)
+    {
+        var role =  dbContext.Roles.Where(r => r.Id == id).FirstOrDefault();
+        return (role?.Name ?? "");
+    }
 }

@@ -22,7 +22,7 @@
         <div id="roleButtonWrapper">
             <button type="button" class="btn btn-primary mb-2 d-flex align-items-center" onclick="openRoleModal()">
                 <iconify-icon icon="solar:add-circle-broken" class="nav-small-cap-icon fs-6 me-1"></iconify-icon>
-                Função
+                Perfil
             </button>
         </div>
         
@@ -30,8 +30,8 @@
             <table id="roleTable" class="table w-100 table-bordered datatable-select-inputs text-nowrap">
                 <thead>
                 <tr>
-                    <th>Number</th>
-                    <th>Name</th>
+                    <th>Número</th>
+                    <th>Nome</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -46,7 +46,7 @@
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
                 <h4 class="modal-title" id="roleModalTitle">
-                    Vertically centered Modal
+                    Criar
                 </h4>
                 <button type="button" class="btn-close" aria-label="Close" onclick="clearAndCloseRoleModal()"></button>
             </div>
@@ -54,7 +54,7 @@
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" placeholder="Nome" id="roleName" />
                     <label>
-                        <i class="ti ti-lock me-2 fs-4"></i>
+                        <iconify-icon icon="solar:user-broken" class="aside-icon fs-5 me-1"></iconify-icon>
                         <span class="border-start ps-3">Nome</span>
                     </label>
                 </div>
@@ -76,13 +76,13 @@
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
                 <h4 class="modal-title" id="myLargeModalLabel">
-                    Eliminar Função
+                    Eliminar Tipo de Perfil
                 </h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" closeRoleDelitionModal()></button>
             </div>
             <div class="modal-body">
                 <p>
-                    Tem a creteza que pretende eliminar esta marcação?
+                    Tem a creteza que pretende eliminar este tipo de perfil?
                 </p>
             </div>
             <div class="modal-footer">
@@ -123,6 +123,7 @@
 
     //functions to handle onclick
     function openRoleModal() {
+        changeRoleModalsTitleText('Criar Tipo de Perfil')
         changeRoleModalsButtonText('Criar')
         showModal('roleModal')
     }
@@ -169,6 +170,7 @@
         roleBeingEdited = id
 
         changeRoleModalsButtonText('Atualizar')
+        changeRoleModalsTitleText('Editar Tipo de Perfil')
         showModal('roleModal')
     }
     async function createUpdateRole() {
@@ -214,6 +216,9 @@
     //support functions for the ofunctions above
     function changeRoleModalsButtonText(text) {
         document.getElementById('roleModalButton').textContent = text
+    }
+    function changeRoleModalsTitleText(text) {
+        document.getElementById('roleModalTitle').textContent = text
     }
     function reloadRolesTable() {
         table.ajax.reload()

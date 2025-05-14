@@ -48,7 +48,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex align-items-center">
         <h4 class="modal-title" id="dutieModalTitle">
-          Vertically centered Modal
+          Criar
         </h4>
         <button type="button" class="btn-close" aria-label="Close" onclick="clearAndCloseDutieModal()"></button>
       </div>
@@ -56,14 +56,14 @@
           <div class="form-floating mb-3">
               <input type="text" class="form-control" placeholder="Nome" id="dutieName" />
               <label>
-                  <i class="ti ti-lock me-2 fs-4"></i>
+                  <iconify-icon icon="solar:user-broken" class="aside-icon fs-5 me-1"></iconify-icon>
                   <span class="border-start ps-3">Nome</span>
               </label>
           </div>
           <div class="form-floating mb-3">
               <input class="form-control" type="time" value="00:00" id="dutieDefaultTime">
               <label>
-                  <i class="ti ti-lock me-2 fs-4"></i>Confirm
+                  <iconify-icon icon="solar:clock-square-broken" class="aside-icon fs-5 me-1"></iconify-icon>
                   Tempo Medio
               </label>
           </div>
@@ -91,7 +91,7 @@
             </div>
             <div class="modal-body">
                 <p>
-                    Tem a creteza que pretende eliminar esta marcação?
+                    Tem a creteza que pretende eliminar esta função?
                 </p>
             </div>
             <div class="modal-footer">
@@ -133,6 +133,7 @@
 
     //functions to handle onclick
     function openDutieModal() {
+        changeDutieModalsTitleText('Criar Função')
         changeDutieModalsButtonText('Criar')
         showModal('dutieModal')
     }
@@ -180,6 +181,7 @@
         dutieBeingEdited = id
 
         changeDutieModalsButtonText('Atualizar')
+        changeDutieModalsTitleText('Editar Função')
         showModal('dutieModal')
     }
     async function createUpdateDutie() {
@@ -226,6 +228,9 @@
     //support functions for the ofunctions above
     function changeDutieModalsButtonText(text) {
         document.getElementById('dutieModalButton').textContent = text
+    }
+    function changeDutieModalsTitleText(text) {
+        document.getElementById('dutieModalTitle').textContent = text
     }
     function reloadDutiesTable() {
         table.ajax.reload()

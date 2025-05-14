@@ -2,6 +2,7 @@ using LCalendar.Dtos;
 using LCalendar.Models;
 using LCalendar.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LCalendar.Controllers;
 
@@ -9,10 +10,6 @@ public class EmployeesController (AppDbContext dbContext) : Controller
 {
     public IActionResult EmployeesPage()
     {
-        var employees = dbContext.Employees.ToList();
-        var fullEmployeesInfo = employees.ConvertToFullInfo(dbContext);
-        ViewBag.Employees = fullEmployeesInfo;
-        
         var roles = dbContext.Roles.ToList();
         ViewBag.Roles = roles;
         
@@ -22,15 +19,7 @@ public class EmployeesController (AppDbContext dbContext) : Controller
     [HttpPost]
     public IActionResult CreateEmployee([FromBody] EmployeeInfo employeeInfo)
     {
-        var newEmployee = new Employee
-        {
-            Name = employeeInfo.Name,
-            Email = employeeInfo.Email,
-            Password = GeneralUtils.HashPassword(employeeInfo.Password),
-            CreationTime = DateTime.Now,
-            RoleId = employeeInfo.RoleId,
-            Img = employeeInfo.Img
-        };
+        var newEmployee = employeeInfo.ConvertToEmployee();
         dbContext.Employees.Add(newEmployee);
         dbContext.SaveChanges();
         
@@ -43,15 +32,13 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         var employee = dbContext.Employees.Where(e => e.Id == id).FirstOrDefault();
         if (employee == null)
         {
-            return BadRequest("No employee was found from this Id.");
+            return BadRequest("Employee not found");
         }
         
+        //the other properties will be changeable in other endpoints
         employee.Name = employeeInfo.Name;
         employee.Email = employeeInfo.Email;
-        employee.Password = GeneralUtils.HashPassword(employeeInfo.Password);
-        employee.CreationTime = DateTime.Now;
         employee.RoleId = employeeInfo.RoleId;
-        employee.Img = employeeInfo.Img;
         dbContext.SaveChanges();
         
         return Ok();
@@ -63,10 +50,10 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         var employee = dbContext.Employees.Where(e => e.Id == id).FirstOrDefault();
         if (employee == null)
         {
-            return BadRequest("No employee was found from this Id.");
+            return BadRequest("Employee not found");
         }
         
-        dbContext.Employees.Remove(employee);
+        employee.IsDeleted = true;
         dbContext.SaveChanges();
         
         return Ok();
@@ -78,11 +65,26 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         var employee = dbContext.Employees.Where(e => e.Id == id).FirstOrDefault();
         if (employee == null)
         {
-            return BadRequest("No employee was found from this Id.");
+            return BadRequest("Employee not found");
         }
 
         var employeeInfo = employee.ConvertToEmployeeInfo();
         
         return Ok(employeeInfo);
+    }
+
+    public IActionResult GetAllEmployeesInfos()
+    {
+        var allEmployees = dbContext.Employees.Where(e => !e.IsDeleted).ToList()
+            .Select(e => new
+            {
+                name = e.Name,
+                email = e.Email,
+                role = RolesUtils.GetRoleNameById((e.RoleId ?? 0), dbContext),
+                creationTime = e.CreationTime,
+                buttons = GeneralUtils.GetTableEditDeleteButtons(e.Id, "startEmployeeDelition", "startEmployeeEdition")
+            }).ToList();
+        
+        return Ok(allEmployees);
     }
 }

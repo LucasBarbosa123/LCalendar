@@ -29,7 +29,6 @@ public static class EmployeesUtils
             Img = employee.Img,
             
             Password = "",
-            PasswordConfirmation = ""
         };
         
         return employeeInfo;

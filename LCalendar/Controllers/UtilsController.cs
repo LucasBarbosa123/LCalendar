@@ -8,6 +8,9 @@ public class UtilsController : Controller
     [HttpGet]
     public IActionResult GetGeneratedPassword()
     {
-        return Ok(GeneralUtils.GeneratePassword());
+        return Ok(new
+        {
+            generatedPass = GeneralUtils.GeneratePassword()
+        });
     }
 }
