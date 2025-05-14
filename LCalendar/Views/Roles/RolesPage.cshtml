@@ -15,3 +15,207 @@
         <li class="breadcrumb-item text-muted" aria-current="page">Tipos de Perfil</li>
     </ol>
 </nav>
+
+<div class="card">
+    <div class="card-body">
+        <!-- BUTTON FOR THE ROLE MODAL -->
+        <div id="roleButtonWrapper">
+            <button type="button" class="btn btn-primary mb-2 d-flex align-items-center" onclick="openRoleModal()">
+                <iconify-icon icon="solar:add-circle-broken" class="nav-small-cap-icon fs-6 me-1"></iconify-icon>
+                Função
+            </button>
+        </div>
+        
+        <div class="table-responsive">
+            <table id="roleTable" class="table w-100 table-bordered datatable-select-inputs text-nowrap">
+                <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ROLE MODAL -->
+<div class="modal fade" id="roleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"  aria-labelledby="vertical-center-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="roleModalTitle">
+                    Vertically centered Modal
+                </h4>
+                <button type="button" class="btn-close" aria-label="Close" onclick="clearAndCloseRoleModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Nome" id="roleName" />
+                    <label>
+                        <i class="ti ti-lock me-2 fs-4"></i>
+                        <span class="border-start ps-3">Nome</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="clearAndCloseRoleModal()">
+                    Close
+                </button>
+                <button id="roleModalButton" type="button" class="btn bg-primary-subtle waves-effect text-start" onclick="createUpdateRole()">
+                    Criar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="roleDelitionModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myLargeModalLabel">
+                    Eliminar Função
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" closeRoleDelitionModal()></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Tem a creteza que pretende eliminar esta marcação?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="closeRoleDelitionModal()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger  waves-effect text-start" onclick="deleteRole()">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let table
+    let roleBeingEdited = 0
+    let roleBeenEliminated = 0
+    
+    //function that handles all the things that should happend on the page render
+    runAfterRender(() => {
+        let tableId= 'roleTable';
+        
+        table = $(`#${tableId}`).DataTable({
+            ajax: {
+                url: '/Roles/GetAllRolesInfos',
+                dataSrc: '' // tells DataTables to use the root array
+            },
+            columns: [
+                { data: 'number' },
+                { data: 'name' },
+                { data: 'buttons' }
+            ],
+            responsive: true,
+        })
+        addjustDataTablesTopSection(tableId, 'roleButtonWrapper')
+    })
+
+    //functions to handle onclick
+    function openRoleModal() {
+        changeRoleModalsButtonText('Criar')
+        showModal('roleModal')
+    }
+    function clearAndCloseRoleModal() {
+        roleBeingEdited = 0
+
+        let modalId = 'roleModal'
+        clearModal(modalId)
+        hideModal(modalId)
+    }
+    async function deleteRole() {
+        try {
+            const res = await fetch(`/Roles/DeleteRole?id=${roleBeenEliminated}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+        } catch (error) {
+            console.error('Error deleting role:', error);
+        }
+
+        closeRoleDelitionModal()
+        reloadRolesTable()
+    }
+    async function startRoleEdition(id) {
+        let roleInfo
+        
+        try {
+            const res = await fetch(`/Roles/GetRoleInfo?id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+
+            roleInfo = await res.json()
+        } catch (error) {
+            console.error('Error creating appointment:', error);
+        }
+
+        document.getElementById('roleName').value = roleInfo.name
+
+        roleBeingEdited = id
+
+        changeRoleModalsButtonText('Atualizar')
+        showModal('roleModal')
+    }
+    async function createUpdateRole() {
+        let roleInfo = {
+            name: document.getElementById('roleName').value,
+        }
+
+        try {
+            if (roleBeingEdited == 0) {
+                const res = await fetch('/Roles/CreateRole', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(roleInfo)
+                })
+            }
+            else {
+                const res = await fetch(`/Roles/UpdateRole?id=${roleBeingEdited}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(roleInfo)
+                })
+            }
+        } catch (error) {
+            console.error('Error creating or updating appointment:', error);
+        }
+
+        clearAndCloseRoleModal()
+        reloadRolesTable()
+    }
+    function startRoleDelition(id) {
+        roleBeenEliminated = id
+        showModal('roleDelitionModal')
+    }
+    function closeRoleDelitionModal() {
+        roleBeenEliminated = 0
+        hideModal('roleDelitionModal')
+    }
+    
+    //support functions for the ofunctions above
+    function changeRoleModalsButtonText(text) {
+        document.getElementById('roleModalButton').textContent = text
+    }
+    function reloadRolesTable() {
+        table.ajax.reload()
+    }
+</script>

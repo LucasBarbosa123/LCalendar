@@ -43,7 +43,7 @@
 </div>
 
 <!-- DUTIE MODAL -->
-<div class="modal fade" id="dutieModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
+<div class="modal fade" id="dutieModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"  aria-labelledby="vertical-center-modal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header d-flex align-items-center">
@@ -78,44 +78,6 @@
       </div>
     </div>
   </div>
-</div>
-
-<!-- DUTIE MODAL -->
-<div class="modal fade" id="dutieModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="dutieModalTitle">
-                    Vertically centered Modal
-                </h4>
-                <button type="button" class="btn-close" aria-label="Close" onclick="clearAndCloseDutieModal()"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Nome" id="dutieName" />
-                    <label>
-                        <i class="ti ti-lock me-2 fs-4"></i>
-                        <span class="border-start ps-3">Nome</span>
-                    </label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input class="form-control" type="time" value="00:00" id="dutieDefaultTime">
-                    <label>
-                        <i class="ti ti-lock me-2 fs-4"></i>
-                        <span class="border-start ps-3">Tempo Medio</span>
-                    </label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn bg-secondary-subtle text-secondary waves-effect text-start" onclick="clearAndCloseDutieModal()">
-                    Cancelar
-                </button>
-                <button id="dutieModalButton" type="button" class="btn bg-primary-subtle waves-effect text-start" onclick="createUpdateDutie()">
-                    Criar
-                </button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" id="dutieDelitionModal" tabindex="-1" aria-labelledby="vertical-center-modal" aria-hidden="true">
