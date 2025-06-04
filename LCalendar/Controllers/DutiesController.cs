@@ -1,5 +1,6 @@
 using LCalendar.Dtos;
 using LCalendar.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LCalendar.Controllers;
@@ -7,11 +8,13 @@ namespace LCalendar.Controllers;
 public class DutiesController (AppDbContext dbContext) : Controller
 {
     // GET
+    [RequireLogin]
     public IActionResult DutiesPage()
     {
         return View();
     }
 
+    [RequireLogin]
     [HttpPost]
     public IActionResult CreateDutie([FromBody] DutieInfo dutieInfo)
     {
@@ -22,6 +25,7 @@ public class DutiesController (AppDbContext dbContext) : Controller
         return Created();
     }
 
+    [RequireLogin]
     [HttpPut]
     public IActionResult UpdateDutie([FromQuery] int id, [FromBody] DutieInfo dutieInfo)
     {
@@ -38,6 +42,7 @@ public class DutiesController (AppDbContext dbContext) : Controller
         return Ok();
     }
 
+    [RequireLogin]
     [HttpDelete]
     public IActionResult DeleteDutie([FromQuery] int id)
     {
@@ -56,6 +61,7 @@ public class DutiesController (AppDbContext dbContext) : Controller
         return Ok();
     }
 
+    [RequireLogin]
     [HttpGet]
     public IActionResult GetDutieInfo([FromQuery] int id)
     {   
@@ -69,6 +75,7 @@ public class DutiesController (AppDbContext dbContext) : Controller
         return Ok(dutieInfo);
     }
 
+    [RequireLogin]
     [HttpGet]
     public IActionResult GetAllDutiesInfos()
     {

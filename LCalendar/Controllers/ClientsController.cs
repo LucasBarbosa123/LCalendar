@@ -1,12 +1,14 @@
 using LCalendar.Dtos;
 using LCalendar.Models;
 using LCalendar.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LCalendar.Controllers;
 
 public class ClientsController (AppDbContext dbContext) : Controller
 {
+    [RequireLogin]
     public IActionResult ClientsPage()
     {
         var clients = dbContext.Clients.ToList();
@@ -15,6 +17,7 @@ public class ClientsController (AppDbContext dbContext) : Controller
         return View();
     }
 
+    [RequireLogin]
     [HttpDelete]
     public IActionResult DeleteClient(int id)
     {
@@ -30,6 +33,7 @@ public class ClientsController (AppDbContext dbContext) : Controller
         return Ok();
     }
 
+    [RequireLogin]
     [HttpPost]
     public IActionResult CreateClient([FromBody] ClientInfo clientInfo)
     {
@@ -43,6 +47,7 @@ public class ClientsController (AppDbContext dbContext) : Controller
         return Created();
     }
 
+    [RequireLogin]
     [HttpPut]
     public IActionResult UpdateClient([FromQuery] int id, [FromBody] ClientInfo clientInfo)
     {
@@ -58,6 +63,7 @@ public class ClientsController (AppDbContext dbContext) : Controller
         return Ok();
     }
 
+    [RequireLogin]
     [HttpGet]
     public IActionResult GetClientInfo([FromQuery] int id)
     {

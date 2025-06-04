@@ -1,6 +1,7 @@
 using LCalendar.Dtos;
 using LCalendar.Models;
 using LCalendar.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace LCalendar.Controllers;
 
 public class EmployeesController (AppDbContext dbContext) : Controller
 {
+    [RequireLogin]
     public IActionResult EmployeesPage()
     {
         var roles = dbContext.Roles.ToList();
@@ -16,6 +18,7 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         return View();
     }
 
+    [RequireLogin]
     [HttpPost]
     public IActionResult CreateEmployee([FromBody] EmployeeInfo employeeInfo)
     {
@@ -26,6 +29,7 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         return Created();
     }
 
+    [RequireLogin]
     [HttpPut]
     public IActionResult UpdateEmployee([FromQuery] int id, [FromBody] EmployeeInfo employeeInfo)
     {
@@ -44,6 +48,7 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         return Ok();
     }
 
+    [RequireLogin]
     [HttpDelete]
     public IActionResult DeleteEmployee([FromQuery] int id)
     {
@@ -59,6 +64,7 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         return Ok();
     }
     
+    [RequireLogin]
     [HttpGet]
     public IActionResult GetEmployeeInfo([FromQuery] int id)
     {
@@ -73,6 +79,7 @@ public class EmployeesController (AppDbContext dbContext) : Controller
         return Ok(employeeInfo);
     }
 
+    [RequireLogin]
     public IActionResult GetAllEmployeesInfos()
     {
         var allEmployees = dbContext.Employees.Where(e => !e.IsDeleted).ToList()

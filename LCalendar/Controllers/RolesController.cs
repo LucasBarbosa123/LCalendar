@@ -11,6 +11,7 @@ public class RolesController (AppDbContext dbContext) : Controller
         return View();
     }
 
+    [RequireLogin]
     [HttpPost]
     public IActionResult CreateRole([FromBody] RoleInfo roleInfo)
     {
@@ -21,6 +22,7 @@ public class RolesController (AppDbContext dbContext) : Controller
         return Created();
     }
     
+    [RequireLogin]
     [HttpPut]
     public IActionResult UpdateRole([FromQuery] int id, [FromBody] RoleInfo roleInfo)
     {
@@ -36,6 +38,7 @@ public class RolesController (AppDbContext dbContext) : Controller
         return Ok();
     }
     
+    [RequireLogin]
     [HttpDelete]
     public IActionResult DeleteRole([FromQuery] int id)
     {
@@ -51,6 +54,7 @@ public class RolesController (AppDbContext dbContext) : Controller
         return Ok();
     }
     
+    [RequireLogin]
     [HttpGet]
     public IActionResult GetRoleInfo([FromQuery] int id)
     {
@@ -65,6 +69,7 @@ public class RolesController (AppDbContext dbContext) : Controller
         return Ok(roleInfo);
     }
     
+    [RequireLogin]
     [HttpGet]
     public IActionResult GetAllRolesInfos()
     {

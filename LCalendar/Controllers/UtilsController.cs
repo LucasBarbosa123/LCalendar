@@ -5,6 +5,7 @@ namespace LCalendar.Controllers;
 
 public class UtilsController : Controller
 {
+    [RequireLogin]
     [HttpGet]
     public IActionResult GetGeneratedPassword()
     {

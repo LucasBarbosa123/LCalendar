@@ -5,11 +5,13 @@ using LCalendar.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using LCalendar.Models;
 using LCalendar.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LCalendar.Controllers;
 
 public class ApointmentsController (AppDbContext dbContext) : Controller
 {
+    [RequireLogin]
     public IActionResult CalendarPage()
     {
         var employees =  dbContext.Employees.ToList();
@@ -21,6 +23,7 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
         return View();
     }
     
+    [RequireLogin]
     public IActionResult GetCalendarEvents([FromQuery] DateTime start, [FromQuery] DateTime end)
     {
         var allEvents = dbContext.Apointments.ToList();
@@ -35,6 +38,7 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
         return Json(calendarEvents);
     }
 
+    [RequireLogin]
     [HttpPost]
     public IActionResult CreateAppointment([FromBody] ApointmentInfo appointmentInfos)
     {
@@ -57,6 +61,7 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
         return Created();
     }
 
+    [RequireLogin]
     [HttpPut]
     public IActionResult UpdateAppointment([FromQuery] int id, [FromBody] ApointmentInfo appointmentInfos)
     {
@@ -81,6 +86,7 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
         return Ok();
     }
 
+    [RequireLogin]
     [HttpDelete]
     public IActionResult DeleteAppointment([FromQuery] int id)
     {
@@ -96,6 +102,7 @@ public class ApointmentsController (AppDbContext dbContext) : Controller
         return Ok();
     }
 
+    [RequireLogin]
     public IActionResult GetAppointment([FromQuery] int id)
     {
         var appointment = dbContext.Apointments.Where(a => a.Id == id).FirstOrDefault();

@@ -15,6 +15,7 @@ public class HomeController : Controller
         _dbContext = dbContext;
     }
 
+    [RequireLogin]
     public IActionResult Index()
     {
         return View();
