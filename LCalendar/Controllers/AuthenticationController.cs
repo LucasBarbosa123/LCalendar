@@ -38,6 +38,7 @@ public class AuthenticationController (AppDbContext dbContext) : Controller
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.Strict,
+            Expires = DateTime.Now.AddYears(30)
         };
 
         var newCoockie = new EmployeeLoginCoockie(employee.Id, (loginFromEmployeePageInfo.Remember ?? false));
