@@ -18,7 +18,7 @@ public class AuthenticationController (AppDbContext dbContext) : Controller
     {
         if ((loginFromEmployeePageInfo.Password ?? "") == "" || (loginFromEmployeePageInfo.Email ?? "") == "")
         {
-            return Unauthorized(new { errorMsg = "Bowth email and password need to be filled" });
+            return BadRequest(new { errorMsg = "Bowth email and password need to be filled" });
         }
         
         var employee = dbContext.Employees.Where(e => e.Email == loginFromEmployeePageInfo.Email).FirstOrDefault();
@@ -32,25 +32,16 @@ public class AuthenticationController (AppDbContext dbContext) : Controller
         {
             return Unauthorized("Email or password incorrect.");
         }
-
-        var expiringDate = DateTimeOffset.UtcNow.AddMinutes(30);
-        if (loginFromEmployeePageInfo.Remember == true)
-        {
-            expiringDate = DateTimeOffset.UtcNow.AddYears(30);
-        }
         
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = expiringDate
         };
 
-        var newCoockie = new EmployeeLoginCoockie(employee.Id);
+        var newCoockie = new EmployeeLoginCoockie(employee.Id, (loginFromEmployeePageInfo.Remember ?? false));
         HttpContext.Response.Cookies.Append("LoggedInUser", JsonSerializer.Serialize(newCoockie), cookieOptions);
-
-        
         
         return Json(new { redirectUrl = "/" });
     }

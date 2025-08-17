@@ -29,7 +29,7 @@
               </a>
             </div>
             <div class="auth-max-width col-sm-8 col-md-6 col-xl-7 px-4">
-              <h2 class="mb-1 fs-7 fw-bolder">Welcome to MaterialPro</h2>
+              <h2 class="mb-1 fs-7 fw-bolder">Welcome to MaterialPro</h2> 
               <p class="mb-7">Your Admin Dashboard</p>
               <form>
                 <div class="mb-3">
@@ -49,7 +49,7 @@
                   </div>
                   <a class="text-primary fw-medium fs-3" href="../main/authentication-forgot-password.html">Forgot Password ?</a>
                 </div>
-                <button type="button" class="btn btn-primary w-100 py-8 mb-4" onclick="tryLogin()">Entrar</button>
+                <button type="submit" class="btn btn-primary w-100 py-8 mb-4" onclick="tryLogin(event)">Entrar</button>
               </form>
             </div>
           </div>
@@ -65,7 +65,8 @@
 </div>
 
 <script>
-  async function tryLogin() {
+  async function tryLogin(_event) {
+    _event.preventDefault()
     let loginInfo = {
       email: document.getElementById('emailInput').value,
       password: document.getElementById('passwordInput').value,

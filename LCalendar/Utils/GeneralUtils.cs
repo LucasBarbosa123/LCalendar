@@ -109,4 +109,16 @@ public static class GeneralUtils
         
         return $"{strartDivTag}{buttons}{endtDivTag}";
     }
+    
+    static public bool IsStillValid(this EmployeeLoginCoockie employeeLoginCoockie)
+    {
+        if ((employeeLoginCoockie.KeepMeLoggedIn ?? false))
+        {
+            return (employeeLoginCoockie.LoginDate ?? DateTime.MinValue) > DateTime.Now.AddDays(-12);
+        }
+        else
+        {
+            return (employeeLoginCoockie.LoginDate ?? DateTime.MinValue) > DateTime.Now.AddHours(-4);
+        }
+    }
 }
